@@ -1,0 +1,13 @@
+name: village
+version: 0.1.0
+
+authors:
+  - your-name-here <your-email-here>
+
+targets:
+  village:
+    main: src/village.cr
+
+crystal: 0.30.0
+
+license: MIT

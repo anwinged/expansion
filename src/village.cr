@@ -1,4 +1,3 @@
-# TODO: Write documentation for `Village`
 module Village
   VERSION = "0.1.0"
 

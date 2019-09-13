@@ -1,6 +1,7 @@
 /.crystal/
+/.shards/
+/bin/
+/build/
 /docs/
 /lib/
-/bin/
-/.shards/
 *.dwarf

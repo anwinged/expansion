@@ -21,54 +21,59 @@ abstract class Command
     @ts
   end
 
-  abstract def run(queue : CommandQueue, res : Resources)
+  abstract def run(world : World)
 end
 
 class BuildMillCommand < Command
-  def run(queue : CommandQueue, res : Resources)
+  def run(world : World)
     puts "build mill"
     c = GetWoodCommand.new(@ts + 5)
-    queue.push(c)
+    world.push(c)
   end
 end
 
 class GetWoodCommand < Command
-  def run(queue : CommandQueue, res : Resources)
+  def run(world : World)
+    res = world.resources
     res.add_wood(10)
     puts "get wood"
     c = GetWoodCommand.new(@ts + 5)
-    queue.push(c)
+    world.push(c)
   end
 end
 
-class CommandQueue
+class World
   def initialize
     @resources = Resources.new
-    @data = Array(Command).new
+    @queue = Array(Command).new
+  end
+
+  def resources
+    @resources
   end
 
   def push(command : Command)
     printf "push command %d\n", command.ts
-    @data.push(command)
-    @data.sort! do |c|
+    @queue.push(command)
+    @queue.sort! do |c|
       -c.ts
     end
   end
 
   def run(ts : Int32)
-    while @data.size != 0
-      c = @data.pop
+    while @queue.size != 0
+      c = @queue.pop
       printf "pop command %d\n", c.ts
       if c.ts > ts
         break
       end
-      c.run(self, @resources)
+      c.run(self)
     end
     printf "Wood: %d\n", @resources.wood
   end
 end
 
-q = CommandQueue.new
+q = World.new
 q.push(BuildMillCommand.new(0))
 q.push(BuildMillCommand.new(0))
 q.push(BuildMillCommand.new(0))

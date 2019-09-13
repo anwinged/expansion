@@ -21,10 +21,15 @@ abstract class Command
     @ts
   end
 
+  abstract def supports?(world : World) : Bool
   abstract def run(world : World)
 end
 
 class BuildMillCommand < Command
+  def supports?(world : World) : Bool
+    return true
+  end
+
   def run(world : World)
     puts "build mill"
     c = GetWoodCommand.new(@ts + 5)
@@ -33,6 +38,10 @@ class BuildMillCommand < Command
 end
 
 class GetWoodCommand < Command
+  def supports?(world : World) : Bool
+    return true
+  end
+
   def run(world : World)
     res = world.resources
     res.add_wood(10)
@@ -52,12 +61,16 @@ class World
     @resources
   end
 
-  def push(command : Command)
+  def push(command : Command) : Bool
+    if !command.supports?(self)
+      return false
+    end
     printf "push command %d\n", command.ts
     @queue.push(command)
     @queue.sort! do |c|
       -c.ts
     end
+    true
   end
 
   def run(ts : Int32)

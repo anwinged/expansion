@@ -37,6 +37,18 @@ class BuildMillCommand < Command
   end
 end
 
+class BuildForesterHouseCommand < Command
+  def supports?(world : World) : Bool
+    return true
+  end
+
+  def run(world : World)
+    puts "build forester house"
+    c = GrowWoodCommand.new(@ts + 10)
+    world.push(c)
+  end
+end
+
 class GetWoodCommand < Command
   def supports?(world : World) : Bool
     return true
@@ -46,6 +58,19 @@ class GetWoodCommand < Command
     res = world.resources
     res.add_wood(10)
     puts "get wood"
+    c = GetWoodCommand.new(@ts + 5)
+    world.push(c)
+  end
+end
+
+class GrowWoodCommand < Command
+  def supports?(world : World) : Bool
+    return true
+  end
+
+  def run(world : World)
+    res = world.resources
+    puts "grow wood"
     c = GetWoodCommand.new(@ts + 5)
     world.push(c)
   end
@@ -159,5 +184,6 @@ end
 
 w = World.new
 w.map.print
-w.push(BuildMillCommand.new(2))
-w.run(10)
+w.push(BuildMillCommand.new(0))
+w.push(BuildForesterHouseCommand.new(0))
+w.run(100)

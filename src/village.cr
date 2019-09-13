@@ -15,16 +15,8 @@ class Resources
 end
 
 abstract class Command
-  def initialize(ts : Int32)
-    @ts = ts
-  end
-
-  def ts
-    @ts
-  end
-
   abstract def supports?(world : World) : Bool
-  abstract def run(world : World)
+  abstract def run(ts : Int32, world : World)
 end
 
 class BuildMillCommand < Command
@@ -32,10 +24,10 @@ class BuildMillCommand < Command
     return true
   end
 
-  def run(world : World)
+  def run(ts : Int32, world : World)
     puts "build mill"
-    c = GetWoodCommand.new(@ts + 5)
-    world.push(c)
+    c = GetWoodCommand.new
+    world.push(ts + 5, c)
   end
 end
 
@@ -44,10 +36,10 @@ class BuildForesterHouseCommand < Command
     return true
   end
 
-  def run(world : World)
+  def run(ts : Int32, world : World)
     puts "build forester house"
-    c = GrowWoodCommand.new(@ts + 10)
-    world.push(c)
+    c = GrowWoodCommand.new
+    world.push(ts + 10, c)
   end
 end
 
@@ -56,12 +48,12 @@ class GetWoodCommand < Command
     return true
   end
 
-  def run(world : World)
+  def run(ts : Int32, world : World)
     res = world.resources
     res.add_wood(10)
     puts "get wood"
-    c = GetWoodCommand.new(@ts + 5)
-    world.push(c)
+    c = GetWoodCommand.new
+    world.push(ts + 5, c)
   end
 end
 
@@ -70,11 +62,11 @@ class GrowWoodCommand < Command
     return true
   end
 
-  def run(world : World)
+  def run(ts : Int32, world : World)
     res = world.resources
     puts "grow wood"
-    c = GetWoodCommand.new(@ts + 5)
-    world.push(c)
+    c = GetWoodCommand.new
+    world.push(ts + 5, c)
   end
 end
 
@@ -159,23 +151,23 @@ class World
     @map
   end
 
-  def push(command : Command) : Bool
+  def push(ts : Int32, command : Command) : Bool
     if !command.supports?(self)
       return false
     end
-    printf "push command %d\n", command.ts
-    @queue.push(command.ts, command)
+    printf "push command %d\n", ts
+    @queue.push(ts, command)
     true
   end
 
   def run(ts : Int32)
     loop do
-      cmd = @queue.pop(ts)
-      if cmd.nil?
+      item = @queue.pop(ts)
+      if item.nil?
         break
       end
-      printf "pop command %d\n", cmd.ts
-      cmd.run(self)
+      printf "pop command %d\n", item[:ts]
+      item[:cmd].run(item[:ts], self)
     end
     printf "Wood: %d\n", @resources.wood
   end
@@ -183,6 +175,6 @@ end
 
 w = World.new
 w.map.print
-w.push(BuildMillCommand.new(0))
-w.push(BuildForesterHouseCommand.new(0))
+w.push(0, BuildMillCommand.new)
+w.push(1, BuildForesterHouseCommand.new)
 w.run(20)

@@ -51,14 +51,85 @@ class GetWoodCommand < Command
   end
 end
 
+abstract class Tile
+  abstract def letter : Char
+end
+
+class GrassTile < Tile
+  def letter : Char
+    '.'
+  end
+end
+
+class WoodTile < Tile
+  def initialize(cap : Int32)
+    @cap = cap
+    @cur = cap
+  end
+
+  def cap
+    @cap
+  end
+
+  def inc(v : Int32)
+    @cur += v
+    if @cur < 0
+      @cur = 0
+    end
+    if @cur > @cap
+      @cur = @cap
+    end
+  end
+
+  def letter : Char
+    'f'
+  end
+end
+
+class Map
+  def initialize
+    @data = {} of String => Tile
+    (0...4).each do |x|
+      (0...4).each do |y|
+        @data[key(x, y)] = GrassTile.new
+      end
+    end
+    @data[key(1, 1)] = WoodTile.new(100)
+    @data[key(3, 1)] = WoodTile.new(200)
+    @data[key(2, 2)] = WoodTile.new(100)
+  end
+
+  def get(x : Int32, y : Int32) : Tile
+    @data[key(x, y)]
+  end
+
+  def print
+    (0...4).each do |x|
+      (0...4).each do |y|
+        printf "%c", @data[key(x, y)].letter
+      end
+      printf "\n"
+    end
+  end
+
+  private def key(x : Int32, y : Int32) : String
+    return sprintf "%d:%d", x, y
+  end
+end
+
 class World
   def initialize
     @resources = Resources.new
+    @map = Map.new
     @queue = Array(Command).new
   end
 
   def resources
     @resources
+  end
+
+  def map
+    @map
   end
 
   def push(command : Command) : Bool
@@ -86,9 +157,7 @@ class World
   end
 end
 
-q = World.new
-q.push(BuildMillCommand.new(0))
-q.push(BuildMillCommand.new(0))
-q.push(BuildMillCommand.new(0))
-q.push(BuildMillCommand.new(2))
-q.run(10)
+w = World.new
+w.map.print
+w.push(BuildMillCommand.new(2))
+w.run(10)

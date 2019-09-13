@@ -1,3 +1,5 @@
+require "./queue"
+
 class Resources
   def initialize
     @wood = 0
@@ -146,7 +148,7 @@ class World
   def initialize
     @resources = Resources.new
     @map = Map.new
-    @queue = Array(Command).new
+    @queue = App::CommandQueue.new
   end
 
   def resources
@@ -162,21 +164,18 @@ class World
       return false
     end
     printf "push command %d\n", command.ts
-    @queue.push(command)
-    @queue.sort! do |c|
-      -c.ts
-    end
+    @queue.push(command.ts, command)
     true
   end
 
   def run(ts : Int32)
-    while @queue.size != 0
-      c = @queue.pop
-      printf "pop command %d\n", c.ts
-      if c.ts > ts
+    loop do
+      cmd = @queue.pop(ts)
+      if cmd.nil?
         break
       end
-      c.run(self)
+      printf "pop command %d\n", cmd.ts
+      cmd.run(self)
     end
     printf "Wood: %d\n", @resources.wood
   end
@@ -186,4 +185,4 @@ w = World.new
 w.map.print
 w.push(BuildMillCommand.new(0))
 w.push(BuildForesterHouseCommand.new(0))
-w.run(100)
+w.run(20)

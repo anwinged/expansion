@@ -9,6 +9,10 @@ struct Point
   def y
     @y
   end
+
+  def distance(p : Point) : Int32
+    return (p.x - @x).abs + (p.y - @y).abs
+  end
 end
 
 abstract class Tile
@@ -79,7 +83,7 @@ class Map
   end
 
   def get(point : Point) : Tile
-    @data[key(Point.new(x, y))]
+    @data[key(point)]
   end
 
   def set(tile : Tile)
@@ -88,6 +92,24 @@ class Map
 
   def set(point : Point, tile : Tile)
     @data[key(point)] = tile
+  end
+
+  def nearest_wood(point : Point) : Point | Nil
+    p = nil
+    d = 99999
+    (0...4).each do |x|
+      (0...4).each do |y|
+        tile = self.get(Point.new(x, y))
+        if tile.letter == 'f'
+          td = Point.new(x, y).distance(point)
+          if td < d
+            d = td
+            p = Point.new(x, y)
+          end
+        end
+      end
+    end
+    p
   end
 
   def print

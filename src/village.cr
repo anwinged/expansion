@@ -30,12 +30,20 @@ class BuildWoodMillCommand < Command
 
   def run(ts : Int32, world : World)
     printf "build mill at [%d,%d]\n", @point.x, @point.y
-    world.map.set(WoodMillTile.new(@point))
-    world.push(ts + 5, GetWoodCommand.new)
+    mill = WoodMillTile.new(@point)
+    world.map.set(mill)
+    wood_point = world.map.nearest_wood(@point)
+    if !wood_point.nil?
+      printf "cut down wood at [%d,%d]\n", wood_point.x, wood_point.y
+      dist = @point.distance(wood_point)
+      world.push(ts + dist + 5, GetWoodCommand.new(@point))
+    else
+      printf "no wood tile\n"
+    end
   end
 end
 
-class BuildForesterHouseCommand < Command
+class GetWoodCommand < Command
   def initialize(@point : Point)
   end
 
@@ -44,35 +52,16 @@ class BuildForesterHouseCommand < Command
   end
 
   def run(ts : Int32, world : World)
-    printf "build forester house at [%d,%d]\n", @point.x, @point.y
-    world.map.set(ForesterHouseTile.new(@point))
-    world.push(ts + 10, GrowWoodCommand.new)
-  end
-end
-
-class GetWoodCommand < Command
-  def supports?(world : World) : Bool
-    return true
-  end
-
-  def run(ts : Int32, world : World)
     res = world.resources
     res.add_wood(10)
-    puts "get wood"
-    c = GetWoodCommand.new
-    world.push(ts + 5, c)
-  end
-end
-
-class GrowWoodCommand < Command
-  def supports?(world : World) : Bool
-    return true
-  end
-
-  def run(ts : Int32, world : World)
-    res = world.resources
-    puts "grow wood"
-    world.push(ts + 5, GetWoodCommand.new)
+    wood_point = world.map.nearest_wood(@point)
+    if !wood_point.nil?
+      printf "cut down wood at [%d,%d]\n", wood_point.x, wood_point.y
+      dist = @point.distance(wood_point)
+      world.push(ts + dist + 5, GetWoodCommand.new(@point))
+    else
+      printf "no wood tile\n"
+    end
   end
 end
 
@@ -116,6 +105,5 @@ end
 w = World.new
 w.map.print
 w.push(0, BuildWoodMillCommand.new(Point.new(0, 0)))
-w.push(0, BuildForesterHouseCommand.new(Point.new(2, 0)))
 w.run(20)
 w.map.print

@@ -1,4 +1,5 @@
 require "./queue"
+require "./map"
 
 class Resources
   def initialize
@@ -19,14 +20,18 @@ abstract class Command
   abstract def run(ts : Int32, world : World)
 end
 
-class BuildMillCommand < Command
+class BuildWoodMillCommand < Command
+  def initialize(@point : Point)
+  end
+
   def supports?(world : World) : Bool
     return true
   end
 
   def run(ts : Int32, world : World)
-    puts "build mill"
+    printf "build mill at [%d,%d]\n", @point.x, @point.y
     c = GetWoodCommand.new
+    world.map.set(@point, WoodMillTile.new)
     world.push(ts + 5, c)
   end
 end
@@ -89,7 +94,7 @@ class World
     if !command.supports?(self)
       return false
     end
-    printf "push command %d\n", ts
+    printf "push command %s, %d\n", typeof(command), ts
     @queue.push(ts, command)
     true
   end
@@ -109,6 +114,7 @@ end
 
 w = World.new
 w.map.print
-w.push(0, BuildMillCommand.new)
+w.push(0, BuildWoodMillCommand.new(Point.new(0, 0)))
 w.push(1, BuildForesterHouseCommand.new)
 w.run(20)
+w.map.print

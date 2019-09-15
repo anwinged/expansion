@@ -33,6 +33,12 @@ class WoodTile < Tile
   end
 end
 
+class WoodMillTile < Tile
+  def letter : Char
+    'm'
+  end
+end
+
 struct Point
   def initialize(@x : Int32, @y : Int32)
   end
@@ -59,8 +65,12 @@ class Map
     @data[key(Point.new(2, 2))] = WoodTile.new(100)
   end
 
-  def get(x : Int32, y : Int32) : Tile
+  def get(point : Point) : Tile
     @data[key(Point.new(x, y))]
+  end
+
+  def set(point : Point, tile : Tile)
+    @data[key(point)] = tile
   end
 
   def print

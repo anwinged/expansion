@@ -39,6 +39,12 @@ class WoodMillTile < Tile
   end
 end
 
+class ForesterHouseTile < Tile
+  def letter : Char
+    'h'
+  end
+end
+
 struct Point
   def initialize(@x : Int32, @y : Int32)
   end

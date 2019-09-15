@@ -30,21 +30,23 @@ class BuildWoodMillCommand < Command
 
   def run(ts : Int32, world : World)
     printf "build mill at [%d,%d]\n", @point.x, @point.y
-    c = GetWoodCommand.new
     world.map.set(@point, WoodMillTile.new)
-    world.push(ts + 5, c)
+    world.push(ts + 5, GetWoodCommand.new)
   end
 end
 
 class BuildForesterHouseCommand < Command
+  def initialize(@point : Point)
+  end
+
   def supports?(world : World) : Bool
     return true
   end
 
   def run(ts : Int32, world : World)
-    puts "build forester house"
-    c = GrowWoodCommand.new
-    world.push(ts + 10, c)
+    printf "build forester house at [%d,%d]\n", @point.x, @point.y
+    world.map.set(@point, ForesterHouseTile.new)
+    world.push(ts + 10, GrowWoodCommand.new)
   end
 end
 
@@ -115,6 +117,6 @@ end
 w = World.new
 w.map.print
 w.push(0, BuildWoodMillCommand.new(Point.new(0, 0)))
-w.push(1, BuildForesterHouseCommand.new)
+w.push(0, BuildForesterHouseCommand.new(Point.new(2, 0)))
 w.run(20)
 w.map.print

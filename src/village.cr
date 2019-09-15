@@ -30,7 +30,7 @@ class BuildWoodMillCommand < Command
 
   def run(ts : Int32, world : World)
     printf "build mill at [%d,%d]\n", @point.x, @point.y
-    world.map.set(@point, WoodMillTile.new)
+    world.map.set(WoodMillTile.new(@point))
     world.push(ts + 5, GetWoodCommand.new)
   end
 end
@@ -45,7 +45,7 @@ class BuildForesterHouseCommand < Command
 
   def run(ts : Int32, world : World)
     printf "build forester house at [%d,%d]\n", @point.x, @point.y
-    world.map.set(@point, ForesterHouseTile.new)
+    world.map.set(ForesterHouseTile.new(@point))
     world.push(ts + 10, GrowWoodCommand.new)
   end
 end
@@ -72,8 +72,7 @@ class GrowWoodCommand < Command
   def run(ts : Int32, world : World)
     res = world.resources
     puts "grow wood"
-    c = GetWoodCommand.new
-    world.push(ts + 5, c)
+    world.push(ts + 5, GetWoodCommand.new)
   end
 end
 

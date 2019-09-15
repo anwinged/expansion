@@ -1,4 +1,24 @@
+struct Point
+  def initialize(@x : Int32, @y : Int32)
+  end
+
+  def x
+    @x
+  end
+
+  def y
+    @y
+  end
+end
+
 abstract class Tile
+  def initialize(@point : Point)
+  end
+
+  def point
+    @point
+  end
+
   abstract def letter : Char
 end
 
@@ -9,7 +29,7 @@ class GrassTile < Tile
 end
 
 class WoodTile < Tile
-  def initialize(cap : Int32)
+  def initialize(@point : Point, cap : Int32)
     @cap = cap
     @cur = cap
   end
@@ -45,34 +65,25 @@ class ForesterHouseTile < Tile
   end
 end
 
-struct Point
-  def initialize(@x : Int32, @y : Int32)
-  end
-
-  def x
-    @x
-  end
-
-  def y
-    @y
-  end
-end
-
 class Map
   def initialize
     @data = {} of String => Tile
     (0...4).each do |x|
       (0...4).each do |y|
-        @data[key(Point.new(x, y))] = GrassTile.new
+        self.set(GrassTile.new(Point.new(x, y)))
       end
     end
-    @data[key(Point.new(1, 1))] = WoodTile.new(100)
-    @data[key(Point.new(3, 1))] = WoodTile.new(200)
-    @data[key(Point.new(2, 2))] = WoodTile.new(100)
+    self.set(WoodTile.new(Point.new(1, 1), 100))
+    self.set(WoodTile.new(Point.new(3, 1), 200))
+    self.set(WoodTile.new(Point.new(2, 2), 100))
   end
 
   def get(point : Point) : Tile
     @data[key(Point.new(x, y))]
+  end
+
+  def set(tile : Tile)
+    @data[key(tile.point)] = tile
   end
 
   def set(point : Point, tile : Tile)

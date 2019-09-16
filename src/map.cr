@@ -121,31 +121,19 @@ class Map
     end
   end
 
-  def nearest_point(point : Point, &block) : Point | Nil
-    p = nil
-    d = Int32::MAX
+  def nearest_tile(point : Point, &block) : Tile | Nil
+    seek_tile = nil
+    min_dist = Int32::MAX
     tiles do |tile_point, tile|
       if (yield tile)
         tile_dist = tile_point.distance(point)
-        if tile_dist < d
-          d = tile_dist
-          p = tile_point
+        if tile_dist < min_dist
+          min_dist = tile_dist
+          seek_tile = tile
         end
       end
     end
-    p
-  end
-
-  def nearest_wood(point : Point) : Point | Nil
-    nearest_point point do |tile|
-      tile.letter == 'f' && tile.cur > 0
-    end
-  end
-
-  def nearest_any_wood(point : Point) : Point | Nil
-    nearest_point point do |tile|
-      tile.letter == 'f' && tile.cur < tile.cap
-    end
+    seek_tile
   end
 
   def print

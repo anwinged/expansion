@@ -8,8 +8,8 @@ format:
 	./cr tool format ./src ./spec
 
 .PHONY: spec
-spec:
-	./cr spec --warnings all --error-on-warnings
+spec: format
+	./cr spec --warnings all --error-on-warnings --time
 
 .PHONY: release
 release:

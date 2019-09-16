@@ -25,6 +25,7 @@ end
 class GetWoodCommand < Command
   BASE_TIME = 10
   BASE_WOOD = 80
+  REST_TIME =  5
 
   def initialize(@point : Point)
     @wood = 0
@@ -36,7 +37,7 @@ class GetWoodCommand < Command
       calc_time(wood_tile.as(Tile))
     else
       printf "  << no wood tile\n"
-      BASE_TIME
+      REST_TIME
     end
   end
 
@@ -86,6 +87,7 @@ end
 class GrowWoodCommand < Command
   BASE_TIME = 15
   BASE_WOOD = 30
+  REST_TIME =  5
 
   @wood_tile : Tile | Nil
 
@@ -99,8 +101,7 @@ class GrowWoodCommand < Command
       calc_time(@wood_tile.as(Tile))
     else
       printf "  >> no wood tile\n"
-      @wood = 0
-      BASE_TIME
+      REST_TIME
     end
   end
 

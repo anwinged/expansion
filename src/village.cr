@@ -4,8 +4,7 @@ require "./map"
 require "./queue"
 
 class Resources
-  def initialize
-    @wood = 0
+  def initialize(@wood = 0)
   end
 
   def add_wood(x)
@@ -60,9 +59,7 @@ end
 
 w = World.new
 w.map.print
-w.push(BuildWoodMillCommand.new(Point.new(2, 1)))
 w.push(BuildWoodMillCommand.new(Point.new(2, 3)))
-w.push(BuildForesterHouseCommand.new(Point.new(2, 0)))
 w.push(BuildForesterHouseCommand.new(Point.new(1, 2)))
 w.push(BuildForesterHouseCommand.new(Point.new(3, 2)))
 w.run(120)

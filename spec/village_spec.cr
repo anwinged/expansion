@@ -12,12 +12,3 @@ describe Point do
     p2.distance(p1).should eq 10
   end
 end
-
-describe App::Queue do
-  q = App::Queue(Int32).new
-  q.push(0, 1)
-  q.push(10, 2)
-  q.push(5, 3)
-  item = q.pop(50)
-  item.nil?.should be_falsey
-end

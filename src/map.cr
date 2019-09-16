@@ -14,22 +14,15 @@ struct Point
 end
 
 abstract class Tile
+  property cap : Int32 = 0
+
   def initialize(@point : Point)
-    @cap = 0
     @cur = 0
   end
 
-  def point
-    @point
-  end
-
-  def cap
-    @cap
-  end
-
-  def cur
-    @cur
-  end
+  getter point
+  getter cap
+  getter cur
 
   def withdraw(value)
     if value >= @cur

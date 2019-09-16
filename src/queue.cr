@@ -1,25 +1,25 @@
-class App::Queue(T)
-  struct Item(T)
-    def initialize(@ts : Int32, @value : T)
+class App::Queue
+  struct Item
+    def initialize(@ts : Int32, @command : Command)
     end
 
     getter ts
-    getter value
+    getter command
   end
 
   def initialize
-    @data = [] of Item(T)
+    @data = [] of Item
   end
 
   # Plan finishing of *command* at time *ts*
-  def push(ts : Int32, value : T)
+  def push(ts : Int32, value : Command)
     @data.push(Item.new(ts, value))
     @data.sort! do |a, b|
       b.ts <=> a.ts
     end
   end
 
-  def pop(ts : Int32) : Item(T) | Nil
+  def pop(ts : Int32) : Item | Nil
     if @data.size == 0
       return nil
     end

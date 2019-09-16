@@ -21,7 +21,7 @@ class World
     @ts = 0
     @resources = Resources.new
     @map = Map.new
-    @queue = App::CommandQueue.new
+    @queue = App::Queue.new
   end
 
   private def ts
@@ -49,8 +49,8 @@ class World
       if item.nil?
         break
       end
-      command_ts, command = item[:ts], item[:cmd]
-      @ts = command_ts
+      command = item.command
+      @ts = item.ts
       command.finish(self)
       printf "world : %d : finish `%s`\n", @ts, typeof(command)
     end

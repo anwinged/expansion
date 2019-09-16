@@ -11,7 +11,7 @@ class BuildWoodMillCommand < Command
 
   def start(world : World) : Int32
     printf "  << start build mill at [%d:%d]\n", @point.x, @point.y
-    return BASE_TIME
+    BASE_TIME
   end
 
   def finish(world : World)
@@ -37,7 +37,7 @@ class GetWoodCommand < Command
     else
       printf "  << no wood tile\n"
       @wood = 0
-      return BASE_TIME
+      BASE_TIME
     end
   end
 
@@ -49,7 +49,7 @@ class GetWoodCommand < Command
       @point.x, @point.y,
       dist, @wood,
       wood_point.x, wood_point.y
-    return BASE_TIME + 2 * dist
+    BASE_TIME + 2 * dist
   end
 
   def finish(world : World)
@@ -73,7 +73,7 @@ class BuildForesterHouseCommand < Command
 
   def start(world : World) : Int32
     printf "  >> start build forester house at [%d:%d]\n", @point.x, @point.y
-    return BASE_TIME
+    BASE_TIME
   end
 
   def finish(world : World)
@@ -99,9 +99,9 @@ class GrowWoodCommand < Command
     if !@wood_tile.nil?
       calc_time(@wood_tile.as(Tile))
     else
-      printf "no wood tile\n"
+      printf "  >> no wood tile\n"
       @wood = 0
-      return BASE_TIME
+      BASE_TIME
     end
   end
 
@@ -112,12 +112,13 @@ class GrowWoodCommand < Command
       @point.x, @point.y,
       dist,
       wood_point.x, wood_point.y
-    return BASE_TIME + 2 * dist
+    BASE_TIME + 2 * dist
   end
 
   def finish(world : World)
     printf "  >> finish grow wood at [%d,%d]\n", @point.x, @point.y
     if !@wood_tile.nil?
+      printf "  >> finish grow wood for %d\n", BASE_WOOD
       @wood_tile.as(Tile).charge(BASE_WOOD)
     end
     world.push(GrowWoodCommand.new(@point))
@@ -125,7 +126,7 @@ class GrowWoodCommand < Command
 
   private def nearest_wood(world : World)
     world.map.nearest_tile @point do |tile|
-      tile.letter == 'f' && tile.cur < tile.cur
+      tile.letter == 'f' && tile.cur < tile.cap
     end
   end
 end

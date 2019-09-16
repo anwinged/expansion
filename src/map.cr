@@ -37,15 +37,15 @@ abstract class Tile
     if value >= @cur
       wd = @cur
       @cur = 0
-      return wd
+      wd
     else
       @cur -= value
-      return value
+      value
     end
   end
 
   def charge(value)
-    if value + @cur > @cap
+    if (value + @cur) > @cap
       @cur = @cap
     else
       @cur += value

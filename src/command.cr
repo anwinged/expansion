@@ -23,7 +23,7 @@ class BuildWoodMillCommand < Command
 end
 
 class GetWoodCommand < Command
-  BASE_TIME =  5
+  BASE_TIME = 10
   BASE_WOOD = 80
 
   def initialize(@point : Point)
@@ -32,11 +32,10 @@ class GetWoodCommand < Command
 
   def start(world : World) : Int32
     wood_tile = nearest_wood(world)
-    if !wood_tile.nil?
+    if wood_tile
       calc_time(wood_tile.as(Tile))
     else
       printf "  << no wood tile\n"
-      @wood = 0
       BASE_TIME
     end
   end
@@ -96,7 +95,7 @@ class GrowWoodCommand < Command
 
   def start(world : World) : Int32
     @wood_tile = nearest_wood(world)
-    if !@wood_tile.nil?
+    if @wood_tile
       calc_time(@wood_tile.as(Tile))
     else
       printf "  >> no wood tile\n"
@@ -117,7 +116,7 @@ class GrowWoodCommand < Command
 
   def finish(world : World)
     printf "  >> finish grow wood at [%d,%d]\n", @point.x, @point.y
-    if !@wood_tile.nil?
+    if @wood_tile
       printf "  >> finish grow wood for %d\n", BASE_WOOD
       @wood_tile.as(Tile).charge(BASE_WOOD)
     end

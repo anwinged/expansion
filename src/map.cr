@@ -15,9 +15,9 @@ end
 
 abstract class Tile
   property cap : Int32 = 0
+  property cur : Int32 = 0
 
   def initialize(@point : Point)
-    @cur = 0
   end
 
   getter point
@@ -36,17 +36,14 @@ abstract class Tile
   end
 
   def charge(value)
-    if (value + @cur) > @cap
-      @cur = @cap
-    else
-      @cur += value
-    end
+    charged = @cur + value
+    @cur = charged <= @cap ? charged : @cap
   end
 
   abstract def letter : Char
 end
 
-class GrassTile < Tile
+class StoneTile < Tile
   def letter : Char
     '.'
   end
@@ -82,7 +79,7 @@ class Map
     @data = {} of String => Tile
     (0...SIZE).each do |x|
       (0...SIZE).each do |y|
-        self.set(GrassTile.new(Point.new(x, y)))
+        self.set(StoneTile.new(Point.new(x, y)))
       end
     end
     self.set(WoodTile.new(Point.new(1, 1), 100))

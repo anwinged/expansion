@@ -3,12 +3,12 @@ class App::CommandQueue
     @data = [] of NamedTuple(ts: Int32, cmd: Command)
   end
 
+  # Plan finishing of *command* at time *ts*
   def push(ts : Int32, cmd : Command)
     @data.push({ts: ts, cmd: cmd})
     @data.sort! do |a, b|
       b[:ts] <=> a[:ts]
     end
-    # puts @data
   end
 
   def pop(ts : Int32)

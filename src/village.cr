@@ -1,3 +1,4 @@
+require "colorize"
 require "./queue"
 require "./map"
 
@@ -161,10 +162,10 @@ class World
       if item.nil?
         break
       end
-      cmd_ts, cmd = item[:ts], item[:cmd]
-      @ts = cmd_ts
-      printf "world : %d : finish `%s`\n", @ts, typeof(cmd)
-      cmd.finish(self)
+      command_ts, command = item[:ts], item[:cmd]
+      @ts = command_ts
+      command.finish(self)
+      printf "world : %d : finish `%s`\n", @ts, typeof(command)
     end
   end
 end
@@ -173,5 +174,5 @@ w = World.new
 w.map.print
 w.push(BuildWoodMillCommand.new(Point.new(0, 0)))
 w.push(BuildForesterHouseCommand.new(Point.new(0, 0)))
-w.run(120)
+w.run(60)
 printf "Wood: %d\n", w.resources.wood

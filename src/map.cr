@@ -25,6 +25,10 @@ abstract class Tile
     @point
   end
 
+  def cap
+    @cap
+  end
+
   def cur
     @cur
   end
@@ -81,10 +85,12 @@ class ForesterHouseTile < Tile
 end
 
 class Map
+  SIZE = 4
+
   def initialize
     @data = {} of String => Tile
-    (0...4).each do |x|
-      (0...4).each do |y|
+    (0...SIZE).each do |x|
+      (0...SIZE).each do |y|
         self.set(GrassTile.new(Point.new(x, y)))
       end
     end
@@ -105,45 +111,46 @@ class Map
     @data[key(point)] = tile
   end
 
-  def nearest_wood(point : Point) : Point | Nil
+  def tiles
+    (0...SIZE).each do |x|
+      (0...SIZE).each do |y|
+        point = Point.new(x, y)
+        tile = self.get(point)
+        yield point, tile
+      end
+    end
+  end
+
+  def nearest_point(point : Point, &block) : Point | Nil
     p = nil
-    d = 99999
-    (0...4).each do |x|
-      (0...4).each do |y|
-        tile = self.get(Point.new(x, y))
-        if tile.letter == 'f' && tile.cur > 0
-          td = Point.new(x, y).distance(point)
-          if td < d
-            d = td
-            p = Point.new(x, y)
-          end
+    d = Int32::MAX
+    tiles do |tile_point, tile|
+      if (yield tile)
+        tile_dist = tile_point.distance(point)
+        if tile_dist < d
+          d = tile_dist
+          p = tile_point
         end
       end
     end
     p
+  end
+
+  def nearest_wood(point : Point) : Point | Nil
+    nearest_point point do |tile|
+      tile.letter == 'f' && tile.cur > 0
+    end
   end
 
   def nearest_any_wood(point : Point) : Point | Nil
-    p = nil
-    d = 99999
-    (0...4).each do |x|
-      (0...4).each do |y|
-        tile = self.get(Point.new(x, y))
-        if tile.letter == 'f'
-          td = Point.new(x, y).distance(point)
-          if td < d
-            d = td
-            p = Point.new(x, y)
-          end
-        end
-      end
+    nearest_point point do |tile|
+      tile.letter == 'f' && tile.cur < tile.cap
     end
-    p
   end
 
   def print
-    (0...4).each do |x|
-      (0...4).each do |y|
+    (0...SIZE).each do |x|
+      (0...SIZE).each do |y|
         printf "%c", @data[key(Point.new(x, y))].letter
       end
       printf "\n"

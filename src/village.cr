@@ -16,60 +16,72 @@ class Resources
 end
 
 abstract class Command
-  abstract def supports?(world : World) : Bool
-  abstract def run(ts : Int32, world : World)
+  abstract def start(world : World)
+  abstract def finish(world : World)
 end
 
 class BuildWoodMillCommand < Command
   def initialize(@point : Point)
   end
 
-  def supports?(world : World) : Bool
-    return true
+  def start(world : World) : Int32
+    printf "start build mill at [%d, (%d:%d)]\n", world.ts, @point.x, @point.y
+    return 30
   end
 
-  def run(ts : Int32, world : World)
-    printf "build mill at [%d,%d]\n", @point.x, @point.y
+  def finish(world : World)
+    printf "finish build mill at [%d,%d]\n", @point.x, @point.y
     mill = WoodMillTile.new(@point)
     world.map.set(mill)
-    wood_point = world.map.nearest_wood(@point)
-    if !wood_point.nil?
-      printf "cut down wood at [%d,%d]\n", wood_point.x, wood_point.y
-      dist = @point.distance(wood_point)
-      world.push(ts + dist + 5, GetWoodCommand.new(@point))
-    else
-      printf "no wood tile\n"
-    end
+    world.push(GetWoodCommand.new(@point))
   end
 end
 
 class GetWoodCommand < Command
+  BASE_TIME =  5
+  BASE_WOOD = 20
+
   def initialize(@point : Point)
+    @wood = 0
   end
 
-  def supports?(world : World) : Bool
-    return true
-  end
-
-  def run(ts : Int32, world : World)
-    res = world.resources
-    res.add_wood(10)
+  def start(world : World)
     wood_point = world.map.nearest_wood(@point)
-    if !wood_point.nil?
-      printf "cut down wood at [%d,%d]\n", wood_point.x, wood_point.y
-      dist = @point.distance(wood_point)
-      world.push(ts + dist + 5, GetWoodCommand.new(@point))
-    else
-      printf "no wood tile\n"
-    end
+    # if !wood_point.nil?
+    #   printf "cut down wood at [%d,%d]\n", wood_point.x, wood_point.y
+    #   dist = @point.distance(wood_point)
+    #   world.push(GetWoodCommand.new(@point))
+    # else
+    #   printf "no wood tile\n"
+    # end
+    return BASE_TIME
+  end
+
+  def finish(world : World)
+    world.push(GetWoodCommand.new(@point))
+    # res = world.resources
+    # res.add_wood(10)
+    # wood_point = world.map.nearest_wood(@point)
+    # if !wood_point.nil?
+    #   printf "cut down wood at [%d,%d]\n", wood_point.x, wood_point.y
+    #   dist = @point.distance(wood_point)
+    #   world.push(ts + dist + 5, GetWoodCommand.new(@point))
+    # else
+    #   printf "no wood tile\n"
+    # end
   end
 end
 
 class World
   def initialize
+    @ts = 0
     @resources = Resources.new
     @map = Map.new
     @queue = App::CommandQueue.new
+  end
+
+  def ts
+    @ts
   end
 
   def resources
@@ -80,13 +92,11 @@ class World
     @map
   end
 
-  def push(ts : Int32, command : Command) : Bool
-    if !command.supports?(self)
-      return false
-    end
-    printf "push command %s, %d\n", typeof(command), ts
-    @queue.push(ts, command)
-    true
+  def push(command : Command)
+    dur = command.start(self)
+    done_at = @ts + dur
+    printf "world:plan `%s` at %d\n", typeof(command), done_at
+    @queue.push(done_at, command)
   end
 
   def run(ts : Int32)
@@ -95,15 +105,15 @@ class World
       if item.nil?
         break
       end
-      printf "pop command %d\n", item[:ts]
-      item[:cmd].run(item[:ts], self)
+      cmd_ts, cmd = item[:ts], item[:cmd]
+      @ts = cmd_ts
+      printf "world:finish `%s` at %d\n", typeof(cmd), cmd_ts
+      cmd.finish(self)
     end
-    printf "Wood: %d\n", @resources.wood
   end
 end
 
 w = World.new
 w.map.print
-w.push(0, BuildWoodMillCommand.new(Point.new(0, 0)))
-w.run(20)
-w.map.print
+w.push(BuildWoodMillCommand.new(Point.new(0, 0)))
+w.run(45)

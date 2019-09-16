@@ -11,8 +11,8 @@ class App::Queue
     @data = [] of Item
   end
 
-  # Plan finishing of *command* at time *ts*
   def push(ts : Int32, value : Command)
+    # very unoptimal algo
     @data.push(Item.new(ts, value))
     @data.sort! do |a, b|
       b.ts <=> a.ts

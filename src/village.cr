@@ -25,7 +25,7 @@ class BuildWoodMillCommand < Command
   end
 
   def start(world : World) : Int32
-    printf "start build mill at [%d, (%d:%d)]\n", world.ts, @point.x, @point.y
+    printf "start build mill at [%d:%d]\n", @point.x, @point.y
     return 30
   end
 
@@ -39,36 +39,34 @@ end
 
 class GetWoodCommand < Command
   BASE_TIME =  5
-  BASE_WOOD = 20
+  BASE_WOOD = 80
 
   def initialize(@point : Point)
     @wood = 0
   end
 
-  def start(world : World)
+  def start(world : World) : Int32
     wood_point = world.map.nearest_wood(@point)
-    # if !wood_point.nil?
-    #   printf "cut down wood at [%d,%d]\n", wood_point.x, wood_point.y
-    #   dist = @point.distance(wood_point)
-    #   world.push(GetWoodCommand.new(@point))
-    # else
-    #   printf "no wood tile\n"
-    # end
-    return BASE_TIME
+    if !wood_point.nil?
+      dist = @point.distance(wood_point)
+      tile = world.map.get(wood_point)
+      @wood = tile.withdraw(BASE_WOOD)
+      printf "start cut down wood at [%d,%d] -> %d -> %d -> [%d,%d]\n",
+        @point.x, @point.y,
+        dist, @wood,
+        wood_point.x, wood_point.y
+      return BASE_TIME + 2 * dist
+    else
+      printf "no wood tile\n"
+      @wood = 0
+      return BASE_TIME
+    end
   end
 
   def finish(world : World)
+    printf "finish cut down wood at [%d,%d]\n", @point.x, @point.y
+    world.resources.add_wood(@wood)
     world.push(GetWoodCommand.new(@point))
-    # res = world.resources
-    # res.add_wood(10)
-    # wood_point = world.map.nearest_wood(@point)
-    # if !wood_point.nil?
-    #   printf "cut down wood at [%d,%d]\n", wood_point.x, wood_point.y
-    #   dist = @point.distance(wood_point)
-    #   world.push(ts + dist + 5, GetWoodCommand.new(@point))
-    # else
-    #   printf "no wood tile\n"
-    # end
   end
 end
 
@@ -80,7 +78,7 @@ class World
     @queue = App::CommandQueue.new
   end
 
-  def ts
+  private def ts
     @ts
   end
 
@@ -116,4 +114,5 @@ end
 w = World.new
 w.map.print
 w.push(BuildWoodMillCommand.new(Point.new(0, 0)))
-w.run(45)
+w.run(120)
+printf "Wood: %d\n", w.resources.wood

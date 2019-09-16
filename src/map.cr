@@ -17,10 +17,35 @@ end
 
 abstract class Tile
   def initialize(@point : Point)
+    @cap = 0
+    @cur = 0
   end
 
   def point
     @point
+  end
+
+  def cur
+    @cur
+  end
+
+  def withdraw(value)
+    if value >= @cur
+      wd = @cur
+      @cur = 0
+      return wd
+    else
+      @cur -= value
+      return value
+    end
+  end
+
+  def charge(value)
+    if value + @cur > @cap
+      @cur = @cap
+    else
+      @cur += value
+    end
   end
 
   abstract def letter : Char
@@ -36,20 +61,6 @@ class WoodTile < Tile
   def initialize(@point : Point, cap : Int32)
     @cap = cap
     @cur = cap
-  end
-
-  def cap
-    @cap
-  end
-
-  def inc(v : Int32)
-    @cur += v
-    if @cur < 0
-      @cur = 0
-    end
-    if @cur > @cap
-      @cur = @cap
-    end
   end
 
   def letter : Char
@@ -100,7 +111,7 @@ class Map
     (0...4).each do |x|
       (0...4).each do |y|
         tile = self.get(Point.new(x, y))
-        if tile.letter == 'f'
+        if tile.letter == 'f' && tile.cur > 0
           td = Point.new(x, y).distance(point)
           if td < d
             d = td

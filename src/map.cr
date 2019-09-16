@@ -123,6 +123,24 @@ class Map
     p
   end
 
+  def nearest_any_wood(point : Point) : Point | Nil
+    p = nil
+    d = 99999
+    (0...4).each do |x|
+      (0...4).each do |y|
+        tile = self.get(Point.new(x, y))
+        if tile.letter == 'f'
+          td = Point.new(x, y).distance(point)
+          if td < d
+            d = td
+            p = Point.new(x, y)
+          end
+        end
+      end
+    end
+    p
+  end
+
   def print
     (0...4).each do |x|
       (0...4).each do |y|

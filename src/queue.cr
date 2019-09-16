@@ -5,9 +5,10 @@ class App::CommandQueue
 
   def push(ts : Int32, cmd : Command)
     @data.push({ts: ts, cmd: cmd})
-    @data.sort! do |x|
-      -x.[:ts]
+    @data.sort! do |a, b|
+      b[:ts] <=> a[:ts]
     end
+    # puts @data
   end
 
   def pop(ts : Int32)

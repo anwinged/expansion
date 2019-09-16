@@ -9,7 +9,7 @@ format:
 
 .PHONY: spec
 spec: format
-	./cr spec --warnings all --error-on-warnings --time
+	./cr spec --warnings all --error-on-warnings
 
 .PHONY: release
 release:

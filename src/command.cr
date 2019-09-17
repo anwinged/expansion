@@ -1,3 +1,5 @@
+require "colorize"
+
 abstract class Command
   abstract def start(world : World) : Int32
   abstract def finish(world : World)
@@ -33,23 +35,21 @@ class GetWoodCommand < Command
 
   def start(world : World) : Int32
     wood_tile = nearest_wood(world)
-    if wood_tile
-      calc_time(wood_tile.as(Tile))
+    stock_tile = nearest_stock(world)
+    if wood_tile && stock_tile
+      calc_time(wood_tile.as(Tile), stock_tile.as(Tile))
     else
-      printf "  << no wood tile\n"
+      puts "  << no wood or stock tile".colorize(:red)
       REST_TIME
     end
   end
 
-  private def calc_time(wood_tile : Tile)
-    wood_point = wood_tile.point
-    dist = @point.distance(wood_point)
+  private def calc_time(wood_tile : Tile, stock_tile : Tile)
+    wood_dist = @point.distance(wood_tile.point)
+    stock_dist = @point.distance(stock_tile.point)
     @wood = wood_tile.withdraw(BASE_WOOD)
-    printf "  << start cut down wood at [%d,%d] -> %d -> %d -> [%d,%d]\n",
-      @point.x, @point.y,
-      dist, @wood,
-      wood_point.x, wood_point.y
-    BASE_TIME + 2 * dist
+    printf "  << wood %d, %d, %d\n", BASE_TIME, 2 * wood_dist, 2 * stock_dist
+    BASE_TIME + 2 * wood_dist + 2 * stock_dist
   end
 
   def finish(world : World)
@@ -60,7 +60,13 @@ class GetWoodCommand < Command
 
   private def nearest_wood(world : World)
     world.map.nearest_tile @point do |tile|
-      tile.letter == 'f' && tile.cur > 0
+      tile.supports(TileType::Wood) && tile.cur > 0
+    end
+  end
+
+  private def nearest_stock(world : World)
+    world.map.nearest_tile @point do |tile|
+      tile.supports(TileType::Stock)
     end
   end
 end
@@ -126,7 +132,7 @@ class GrowWoodCommand < Command
 
   private def nearest_wood(world : World)
     world.map.nearest_tile @point do |tile|
-      tile.letter == 'f' && tile.cur < tile.cap
+      tile.supports(TileType::Wood) && tile.cur < tile.cap
     end
   end
 end

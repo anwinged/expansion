@@ -13,6 +13,11 @@ struct Point
   end
 end
 
+enum TileType
+  Stock
+  Wood
+end
+
 abstract class Tile
   property cap : Int32 = 0
   property cur : Int32 = 0
@@ -23,6 +28,9 @@ abstract class Tile
   getter point
   getter cap
   getter cur
+
+  abstract def letter : Char
+  abstract def supports(t : TileType) : Bool
 
   def withdraw(value)
     if value >= @cur
@@ -39,13 +47,25 @@ abstract class Tile
     charged = @cur + value
     @cur = charged <= @cap ? charged : @cap
   end
-
-  abstract def letter : Char
 end
 
 class StoneTile < Tile
   def letter : Char
     '.'
+  end
+
+  def supports(t : TileType) : Bool
+    false
+  end
+end
+
+class MainBaseTile < Tile
+  def letter : Char
+    'M'
+  end
+
+  def supports(t : TileType) : Bool
+    t == TileType::Stock
   end
 end
 
@@ -58,17 +78,29 @@ class WoodTile < Tile
   def letter : Char
     'f'
   end
+
+  def supports(t : TileType) : Bool
+    t == TileType::Wood
+  end
 end
 
 class WoodMillTile < Tile
   def letter : Char
     'm'
   end
+
+  def supports(t : TileType) : Bool
+    t == TileType::Wood
+  end
 end
 
 class ForesterHouseTile < Tile
   def letter : Char
     'h'
+  end
+
+  def supports(t : TileType) : Bool
+    false
   end
 end
 
@@ -82,6 +114,7 @@ class Map
         self.set(StoneTile.new(Point.new(x, y)))
       end
     end
+    self.set(MainBaseTile.new(Point.new(0, 0)))
     self.set(WoodTile.new(Point.new(1, 1), 100))
     self.set(WoodTile.new(Point.new(3, 1), 200))
     self.set(WoodTile.new(Point.new(2, 2), 100))

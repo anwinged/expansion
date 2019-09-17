@@ -62,6 +62,6 @@ w.map.print
 w.push(BuildWoodMillCommand.new(Point.new(2, 3)))
 w.push(BuildForesterHouseCommand.new(Point.new(1, 2)))
 w.push(BuildForesterHouseCommand.new(Point.new(3, 2)))
-w.run(120)
+w.run(60)
 w.map.print
 printf "Wood: %d\n", w.resources.wood

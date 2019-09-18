@@ -1,27 +1,19 @@
-# village
+# Expansion
 
-TODO: Write a description here
+> Мы только что вышли на орбиту. Сейчас будет подготовлен стартовый модуль, 
+> который спустится на поверхность. Мы развернем базу, настроим контроль над
+> нашими роботами-добытчиками. И приступим к выполнению нашей цели -
+> терраформации. Ну, здравствуй, наш новый дом.
 
 ## Installation
 
-TODO: Write installation instructions here
+	$ make build-docker
+	$ make build
 
 ## Usage
 
-TODO: Write usage instructions here
-
-## Development
-
-TODO: Write development instructions here
-
-## Contributing
-
-1. Fork it (<https://github.com/your-github-user/village/fork>)
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create a new Pull Request
+	$ bin/expansion
 
 ## Contributors
 
-- [your-name-here](https://github.com/your-github-user) - creator and maintainer
+- [Anton Vakhrushev](https://github.com/anwinged) - creator and maintainer

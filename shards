@@ -6,4 +6,4 @@ docker run -it \
 	-u "$(id -u):$(id -g)" \
 	-v "$PWD:/app" \
 	-w "/app" \
-	village-crystal shards "$@"
+	expansion-crystal shards "$@"

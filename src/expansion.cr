@@ -4,15 +4,15 @@ require "./map"
 require "./queue"
 
 class Resources
-  def initialize(@wood = 0)
+  def initialize(@crystal = 0)
   end
 
-  def add_wood(x)
-    @wood += x
+  def add_crystal(x)
+    @crystal += x
   end
 
-  def wood
-    @wood
+  def crystal
+    @crystal
   end
 end
 
@@ -59,9 +59,9 @@ end
 
 w = World.new
 w.map.print
-w.push(BuildWoodMillCommand.new(Point.new(2, 3)))
-w.push(BuildForesterHouseCommand.new(Point.new(1, 2)))
-w.push(BuildForesterHouseCommand.new(Point.new(3, 2)))
+w.push(BuildCrystalHarvesterCommand.new(Point.new(2, 3)))
+w.push(BuildCrystalRestorerCommand.new(Point.new(1, 2)))
+w.push(BuildCrystalRestorerCommand.new(Point.new(3, 2)))
 w.run(60)
 w.map.print
-printf "Wood: %d\n", w.resources.wood
+printf "Wood: %d\n", w.resources.crystal

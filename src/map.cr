@@ -13,97 +13,6 @@ struct Point
   end
 end
 
-enum TileType
-  Stock
-  Wood
-end
-
-abstract class Tile
-  property cap : Int32 = 0
-  property cur : Int32 = 0
-
-  def initialize(@point : Point)
-  end
-
-  getter point
-  getter cap
-  getter cur
-
-  abstract def letter : Char
-  abstract def supports(t : TileType) : Bool
-
-  def withdraw(value)
-    if value >= @cur
-      wd = @cur
-      @cur = 0
-      wd
-    else
-      @cur -= value
-      value
-    end
-  end
-
-  def charge(value)
-    charged = @cur + value
-    @cur = charged <= @cap ? charged : @cap
-  end
-end
-
-class StoneTile < Tile
-  def letter : Char
-    '.'
-  end
-
-  def supports(t : TileType) : Bool
-    false
-  end
-end
-
-class MainBaseTile < Tile
-  def letter : Char
-    'M'
-  end
-
-  def supports(t : TileType) : Bool
-    t == TileType::Stock
-  end
-end
-
-class WoodTile < Tile
-  def initialize(@point : Point, cap : Int32)
-    @cap = cap
-    @cur = cap
-  end
-
-  def letter : Char
-    'f'
-  end
-
-  def supports(t : TileType) : Bool
-    t == TileType::Wood
-  end
-end
-
-class WoodMillTile < Tile
-  def letter : Char
-    'm'
-  end
-
-  def supports(t : TileType) : Bool
-    t == TileType::Wood
-  end
-end
-
-class ForesterHouseTile < Tile
-  def letter : Char
-    'h'
-  end
-
-  def supports(t : TileType) : Bool
-    false
-  end
-end
-
 class Map
   SIZE = 4
 
@@ -111,13 +20,13 @@ class Map
     @data = {} of String => Tile
     (0...SIZE).each do |x|
       (0...SIZE).each do |y|
-        self.set(StoneTile.new(Point.new(x, y)))
+        self.set(PlateauTile.new(Point.new(x, y)))
       end
     end
     self.set(MainBaseTile.new(Point.new(0, 0)))
-    self.set(WoodTile.new(Point.new(1, 1), 100))
-    self.set(WoodTile.new(Point.new(3, 1), 200))
-    self.set(WoodTile.new(Point.new(2, 2), 100))
+    self.set(CrystalTile.new(Point.new(1, 1), 100))
+    self.set(CrystalTile.new(Point.new(3, 1), 200))
+    self.set(CrystalTile.new(Point.new(2, 2), 100))
   end
 
   def get(point : Point) : Tile

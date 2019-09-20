@@ -83,10 +83,9 @@ class RestoreCrystalCommand < Command
   RESTORE_VALUE = 30
   REST_TIME     =  5
 
-  @target_tile : Tile | Nil
+  @target_tile : Tile | Nil = nil
 
   def initialize(@point : Point)
-    @target_tile = nil
   end
 
   def start(world : World) : Int32

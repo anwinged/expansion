@@ -3,6 +3,7 @@ enum TileRole
   CrystalHarvester
   CrystalRestorer
   Plateau
+  Terraformer
   Warehouse
 end
 
@@ -89,5 +90,15 @@ class CrystalRestorerTile < Tile
 
   def has_role(role : TileRole) : Bool
     role == TileRole::CrystalRestorer
+  end
+end
+
+class TerraformerTile < Tile
+  def letter : Char
+    'T'
+  end
+
+  def has_role(role : TileRole) : Bool
+    role == TileRole::Terraformer
   end
 end

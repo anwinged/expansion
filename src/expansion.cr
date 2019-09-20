@@ -70,7 +70,7 @@ w = World.new
 w.map.print
 w.push(BuildCrystalHarvesterCommand.new(Point.new(2, 3)))
 w.push(BuildCrystalRestorerCommand.new(Point.new(1, 2)))
-w.push(BuildCrystalRestorerCommand.new(Point.new(3, 2)))
-w.run(60)
+w.push(BuildTerraformerCommand.new(Point.new(3, 2)))
+w.run(240)
 w.map.print
 pp w.resources

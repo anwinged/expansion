@@ -110,3 +110,33 @@ class RestoreCrystalCommand < Command
     end
   end
 end
+
+class BuildTerraformerCommand < Command
+  BUILD_TIME = 120
+
+  def initialize(@point : Point)
+  end
+
+  def start(world : World) : Int32
+    BUILD_TIME
+  end
+
+  def finish(world : World)
+    world.map.set(TerraformerTile.new(@point))
+    world.push(TerraformCommand.new(@point))
+  end
+end
+
+class TerraformCommand < Command
+  def initialize(@point : Point)
+  end
+
+  def start(world : World) : Int32
+    10
+  end
+
+  def finish(world : World)
+    world.resources.inc(ResourceType::Terraformation, 5)
+    world.push(TerraformCommand.new(@point))
+  end
+end

@@ -1,4 +1,4 @@
-enum TileType
+enum TileRole
   CrystalDeposits
   CrystalHarvester
   CrystalRestorer
@@ -18,7 +18,7 @@ abstract class Tile
   getter cur
 
   abstract def letter : Char
-  abstract def type : TileType
+  abstract def has_role(role : TileRole) : Bool
 
   def withdraw(value)
     if value >= @cur
@@ -42,8 +42,8 @@ class PlateauTile < Tile
     '.'
   end
 
-  def type : TileType
-    TileType::Plateau
+  def has_role(role : TileRole) : Bool
+    role == TileRole::Plateau
   end
 end
 
@@ -52,8 +52,8 @@ class MainBaseTile < Tile
     'H'
   end
 
-  def type : TileType
-    TileType::Warehouse
+  def has_role(role : TileRole) : Bool
+    role == TileRole::Warehouse
   end
 end
 
@@ -67,8 +67,8 @@ class CrystalTile < Tile
     'f'
   end
 
-  def type : TileType
-    TileType::CrystalDeposits
+  def has_role(role : TileRole) : Bool
+    role == TileRole::CrystalDeposits
   end
 end
 
@@ -77,8 +77,8 @@ class CrystalHarvesterTile < Tile
     'm'
   end
 
-  def type : TileType
-    TileType::CrystalHarvester
+  def has_role(role : TileRole) : Bool
+    role == TileRole::CrystalHarvester
   end
 end
 
@@ -87,7 +87,7 @@ class CrystalRestorerTile < Tile
     'h'
   end
 
-  def type : TileType
-    TileType::CrystalRestorer
+  def has_role(role : TileRole) : Bool
+    role == TileRole::CrystalRestorer
   end
 end

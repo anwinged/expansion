@@ -51,13 +51,13 @@ class HarvestCrystalCommand < Command
 
   private def nearest_deposit(world : World)
     world.map.nearest_tile @point do |tile|
-      tile.type == TileType::CrystalDeposits && tile.cur > 0
+      tile.has_role(TileRole::CrystalDeposits) && tile.cur > 0
     end
   end
 
   private def nearest_stock(world : World)
     world.map.nearest_tile @point do |tile|
-      tile.type == TileType::Warehouse
+      tile.has_role(TileRole::Warehouse)
     end
   end
 end
@@ -108,7 +108,7 @@ class RestoreCrystalCommand < Command
 
   private def nearest_deposit(world : World)
     world.map.nearest_tile @point do |tile|
-      tile.type == TileType::CrystalDeposits && tile.cur < tile.cap
+      tile.has_role(TileRole::CrystalDeposits) && tile.cur < tile.cap
     end
   end
 end

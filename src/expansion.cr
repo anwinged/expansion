@@ -3,16 +3,25 @@ require "./command"
 require "./map"
 require "./queue"
 
+enum ResourceType
+  Crystal
+  Terraformation
+end
+
 class Resources
-  def initialize(@crystal = 0)
+  def initialize
+    @values = {} of ResourceType => Int32
+    ResourceType.each do |t|
+      @values[t] = 0
+    end
   end
 
-  def add_crystal(x)
-    @crystal += x
+  def [](t : ResourceType)
+    @values[t]
   end
 
-  def crystal
-    @crystal
+  def inc(t : ResourceType, value : Int32)
+    @values[t] = @values[t] + value
   end
 end
 
@@ -64,4 +73,4 @@ w.push(BuildCrystalRestorerCommand.new(Point.new(1, 2)))
 w.push(BuildCrystalRestorerCommand.new(Point.new(3, 2)))
 w.run(60)
 w.map.print
-printf "Wood: %d\n", w.resources.crystal
+pp w.resources

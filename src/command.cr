@@ -16,8 +16,7 @@ class BuildCrystalHarvesterCommand < Command
   end
 
   def finish(world : World)
-    harverster = CrystalHarvesterTile.new(@point)
-    world.map.set(harverster)
+    world.map.set(CrystalHarvesterTile.new(@point))
     world.push(HarvestCrystalCommand.new(@point))
   end
 end
@@ -45,7 +44,7 @@ class HarvestCrystalCommand < Command
   end
 
   def finish(world : World)
-    world.resources.add_crystal(@value)
+    world.resources.inc(ResourceType::Crystal, @value)
     world.push(HarvestCrystalCommand.new(@point))
   end
 

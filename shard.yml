@@ -6,8 +6,8 @@ authors:
 
 targets:
   village:
-    main: src/village.cr
+    main: src/expansion.cr
 
-crystal: 0.30.0
+crystal: 0.31.0
 
 license: MIT

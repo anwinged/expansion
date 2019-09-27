@@ -2,7 +2,13 @@
 
 set -eu
 
-docker run -it \
+TTY=
+
+if [ -t 1 ] ; then
+	TTY=-t
+fi
+
+docker run -i $TTY \
 	-u "$(id -u):$(id -g)" \
 	-v "$PWD:/app" \
 	-w "/app" \

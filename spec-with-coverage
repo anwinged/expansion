@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+set -eux
+
+TEST_FILE=./spec_cov_entry.cr
+TEST_BIN=./spec_cov_bin
+
+mkdir -p ./tmp
+
+echo "require \"./spec/**\"" > "${TEST_FILE}"
+
+./crystal build "${TEST_FILE}" --static --debug -o "${TEST_BIN}"
+
+docker run -it --security-opt seccomp=unconfined \
+	-u "$(id -u):$(id -g)" \
+	-v "$PWD:/app" \
+	-w "/app" \
+	kcov/kcov \
+	kcov --clean --include-path=/app/src /app/coverage "${TEST_BIN}"

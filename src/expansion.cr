@@ -26,15 +26,13 @@ class Resources
 end
 
 class World
+  property ts : Int32
+
   def initialize
     @ts = 0
-    @resources = Resources.new
     @map = Map.new
-    @queue = App::Queue.new
-  end
-
-  private def ts
-    @ts
+    @resources = Resources.new
+    @tasks = App::Queue.new
   end
 
   def resources
@@ -49,12 +47,12 @@ class World
     dur = command.start(self)
     done_at = @ts + dur
     printf "world : %d : plan `%s` at %d\n", @ts, typeof(command), done_at
-    @queue.push(done_at, command)
+    @tasks.push(done_at, command)
   end
 
   def run(ts : Int32)
     loop do
-      item = @queue.pop(ts)
+      item = @tasks.pop(ts)
       if item.nil?
         break
       end
@@ -71,6 +69,6 @@ w.map.print
 w.push(BuildCrystalHarvesterCommand.new(Point.new(2, 3)))
 w.push(BuildCrystalRestorerCommand.new(Point.new(1, 2)))
 w.push(BuildTerraformerCommand.new(Point.new(3, 2)))
-w.run(240)
+w.run(2000)
 w.map.print
 pp w.resources

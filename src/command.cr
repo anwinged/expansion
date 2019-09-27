@@ -128,15 +128,18 @@ class BuildTerraformerCommand < Command
 end
 
 class TerraformCommand < Command
+  PRODUCTION_TIME  = 60
+  PRODUCTION_VALUE =  5
+
   def initialize(@point : Point)
   end
 
   def start(world : World) : Int32
-    10
+    PRODUCTION_TIME
   end
 
   def finish(world : World)
-    world.resources.inc(ResourceType::Terraformation, 5)
+    world.resources.inc(ResourceType::Terraformation, PRODUCTION_VALUE)
     world.push(TerraformCommand.new(@point))
   end
 end

@@ -6,6 +6,9 @@ build-docker:
 	docker pull alpine:edge
 	docker build -t $(APP_NAME)-crystal .
 
+.PHONY: install
+install: build-docker
+
 .PHONY: build
 build:
 	mkdir -p build

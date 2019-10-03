@@ -1,0 +1,2 @@
+class NotEnoughtResources < Exception
+end

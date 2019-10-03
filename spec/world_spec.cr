@@ -10,4 +10,13 @@ describe "World" do
     world.run(100)
     world.map.get(point).has_role(TileRole::CrystalHarvester)
   end
+
+  it "should fail when not enought resources" do
+    world = World.new
+    point = Point.new(2, 3)
+    cmd = BuildCrystalRestorerCommand.new(point)
+    expect_raises(NotEnoughtResources) do
+      world.push(cmd)
+    end
+  end
 end

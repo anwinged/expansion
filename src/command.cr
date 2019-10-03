@@ -62,12 +62,14 @@ class HarvestCrystalCommand < Command
 end
 
 class BuildCrystalRestorerCommand < Command
-  BUILD_TIME = 50
+  CRYSTALS_COST = 100
+  BUILD_TIME    =  50
 
   def initialize(@point : Point)
   end
 
   def start(world : World) : Int32
+    world.resources.dec(ResourceType::Crystal, CRYSTALS_COST)
     BUILD_TIME
   end
 
@@ -112,12 +114,14 @@ class RestoreCrystalCommand < Command
 end
 
 class BuildTerraformerCommand < Command
-  BUILD_TIME = 120
+  CRYSTALS_COST = 100
+  BUILD_TIME    = 120
 
   def initialize(@point : Point)
   end
 
   def start(world : World) : Int32
+    world.resources.dec(ResourceType::Crystal, CRYSTALS_COST)
     BUILD_TIME
   end
 

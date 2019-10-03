@@ -1,3 +1,5 @@
+require "./exception"
+
 enum ResourceType
   Crystal
   Terraformation
@@ -16,6 +18,14 @@ class Resources
   end
 
   def inc(t : ResourceType, value : Int32)
-    @values[t] = @values[t] + value
+    new_value = @values[t] + value
+    if new_value < 0
+      raise NotEnoughtResources.new
+    end
+    @values[t] = new_value
+  end
+
+  def dec(t : ResourceType, value : Int32)
+    inc(t, -value)
   end
 end

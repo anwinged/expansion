@@ -1,9 +1,8 @@
-require "colorize"
-require "./command"
-require "./map"
-require "./queue"
-require "./resources"
-require "./world"
+require "./game/command"
+require "./game/map"
+require "./game/queue"
+require "./game/resources"
+require "./game/world"
 
 UserWorld = World.new
 

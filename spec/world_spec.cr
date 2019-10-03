@@ -1,5 +1,5 @@
 require "./spec_helper"
-require "../src/world"
+require "../src/game/world"
 
 describe "World" do
   it "should build crystal harvester" do

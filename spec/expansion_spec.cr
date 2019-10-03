@@ -1,6 +1,6 @@
 require "./spec_helper"
-require "./../src/map"
-require "./../src/queue"
+require "./../src/game/map"
+require "./../src/game/queue"
 
 describe Point do
   p1 = Point.new(0, 0)

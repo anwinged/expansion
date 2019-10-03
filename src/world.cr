@@ -1,3 +1,5 @@
+require "./resources"
+
 class World
   property ts : Int32
 
@@ -15,7 +17,6 @@ class World
   def push(command : Command)
     dur = command.start(self)
     done_at = @ts + dur
-    printf "world : %d : plan `%s` at %d\n", @ts, typeof(command), done_at
     @tasks.push(done_at, command)
   end
 
@@ -28,7 +29,6 @@ class World
       command = item.command
       @ts = item.ts
       command.finish(self)
-      printf "world : %d : finish `%s`\n", @ts, typeof(command)
     end
   end
 end

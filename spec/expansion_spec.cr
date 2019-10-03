@@ -1,4 +1,4 @@
-require "spec"
+require "./spec_helper"
 require "./../src/map"
 require "./../src/queue"
 

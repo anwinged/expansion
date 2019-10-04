@@ -3,43 +3,50 @@ require "./game/map"
 require "./game/queue"
 require "./game/resources"
 require "./game/world"
+require "./cli/command_router"
 
-UserWorld = World.new
+world = World.new
+
+router = CLI::CommandRouter.new
+
+router.add "st" do
+  printf "Stat:\n\tTime: %d\n\tCrystals: %d\n\tTarraform: %d\n",
+    world.ts,
+    world.resources[ResourceType::Crystal],
+    world.resources[ResourceType::Terraformation]
+end
+
+router.add "m" do
+  world.map.print
+end
+
+router.add "run {ts}" do |p|
+  ts = p["ts"].to_i32
+  world.run ts
+  printf "Run to %d\n", ts
+end
+
+router.add "harv {x} {y}" do |p|
+  x = p["x"].to_i32
+  y = p["y"].to_i32
+  world.push(BuildCrystalHarvesterCommand.new(Point.new(x, y)))
+  printf "Build harvester at %d %d\n", x, y
+end
+
+router.add "rest {x} {y}" do |p|
+  x = p["x"].to_i32
+  y = p["y"].to_i32
+  world.push(BuildCrystalRestorerCommand.new(Point.new(x, y)))
+end
+
+router.add "terr {x} {y}" do |p|
+  x = p["x"].to_i32
+  y = p["y"].to_i32
+  world.push(BuildTerraformerCommand.new(Point.new(x, y)))
+end
 
 def normalize_command(cmd)
   cmd.downcase.gsub(/\s+/, ' ').strip
-end
-
-def run_command(cmd)
-  case
-  when md = /^st/.match(cmd)
-    printf "Stat:\n\tTime: %d\n\tCrystals: %d\n\tTarraform: %d\n",
-      UserWorld.ts,
-      UserWorld.resources[ResourceType::Crystal],
-      UserWorld.resources[ResourceType::Terraformation]
-  when md = /^m/.match(cmd)
-    UserWorld.map.print
-  when md = /^run (?P<ts>\d+)$/.match(cmd)
-    ts = md["ts"].to_i32
-    UserWorld.run(ts)
-    printf "Run to %d\n", ts
-  when md = /^harv (?P<x>\d+)\s+(?P<y>\d+)$/.match(cmd)
-    x = md["x"].to_i32
-    y = md["y"].to_i32
-    UserWorld.push(BuildCrystalHarvesterCommand.new(Point.new(x, y)))
-    printf "Build harvester at %d %d\n", x, y
-  when md = /^rest (?P<x>\d+)\s+(?P<y>\d+)$/.match(cmd)
-    x = md["x"].to_i32
-    y = md["y"].to_i32
-    UserWorld.push(BuildCrystalRestorerCommand.new(Point.new(x, y)))
-  when md = /^terr (?P<x>\d+)\s+(?P<y>\d+)$/.match(cmd)
-    x = md["x"].to_i32
-    y = md["y"].to_i32
-    UserWorld.push(BuildTerraformerCommand.new(Point.new(x, y)))
-  else
-    printf "Out > %s\n", cmd
-  end
-  printf "\n"
 end
 
 loop do
@@ -49,13 +56,6 @@ loop do
   if norm == "exit"
     break
   end
-  run_command(norm)
+  router.handle cmd
+  printf "\n"
 end
-
-# w.map.print
-# w.push(BuildCrystalHarvesterCommand.new(Point.new(2, 3)))
-# w.push(BuildCrystalRestorerCommand.new(Point.new(1, 2)))
-# w.push(BuildTerraformerCommand.new(Point.new(3, 2)))
-# w.run(2000)
-# w.map.print
-# pp w.resources

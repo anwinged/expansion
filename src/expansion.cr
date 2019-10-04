@@ -5,7 +5,7 @@ require "./game/resources"
 require "./game/world"
 require "./cli/command_router"
 
-world = World.new
+world = Game::World.new
 
 router = CLI::CommandRouter.new
 
@@ -29,20 +29,20 @@ end
 router.add "harv {x} {y}" do |p|
   x = p["x"].to_i32
   y = p["y"].to_i32
-  world.push(BuildCrystalHarvesterCommand.new(Point.new(x, y)))
+  world.push(Game::BuildCrystalHarvesterCommand.new(Point.new(x, y)))
   printf "Build harvester at %d %d\n", x, y
 end
 
 router.add "rest {x} {y}" do |p|
   x = p["x"].to_i32
   y = p["y"].to_i32
-  world.push(BuildCrystalRestorerCommand.new(Point.new(x, y)))
+  world.push(Game::BuildCrystalRestorerCommand.new(Point.new(x, y)))
 end
 
 router.add "terr {x} {y}" do |p|
   x = p["x"].to_i32
   y = p["y"].to_i32
-  world.push(BuildTerraformerCommand.new(Point.new(x, y)))
+  world.push(Game::BuildTerraformerCommand.new(Point.new(x, y)))
 end
 
 def normalize_command(cmd)

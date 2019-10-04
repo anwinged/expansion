@@ -4,7 +4,7 @@ require "./../src/game/command"
 
 macro define_dummy_classes(count)
   {% for i in (1...count) %}
-    class Test::DummyCommand{{ i }} < Command
+    class Test::DummyCommand{{ i }} < Game::Command
       def start(world) : Int32
       end
 

@@ -1,6 +1,6 @@
 class App::Queue
   struct Item
-    def initialize(@ts : Int32, @command : Command)
+    def initialize(@ts : Int32, @command : Game::Command)
     end
 
     getter ts
@@ -11,7 +11,7 @@ class App::Queue
     @data = [] of Item
   end
 
-  def push(ts : Int32, value : Command)
+  def push(ts : Int32, value : Game::Command)
     # very unoptimal algo
     @data.push(Item.new(ts, value))
     @data.sort! do |a, b|

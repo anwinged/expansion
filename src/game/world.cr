@@ -1,10 +1,9 @@
 require "./resources"
 
-class World
+class Game::World
   property ts : Int32
 
-  def initialize
-    @ts = 0
+  def initialize(@ts = 0)
     @map = Map.new
     @resources = Resources.new
     @tasks = App::Queue.new

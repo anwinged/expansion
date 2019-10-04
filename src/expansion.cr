@@ -12,8 +12,8 @@ router = CLI::CommandRouter.new
 router.add "st" do
   printf "Stat:\n\tTime: %d\n\tCrystals: %d\n\tTarraform: %d\n",
     world.ts,
-    world.resources[ResourceType::Crystal],
-    world.resources[ResourceType::Terraformation]
+    world.resources[Game::ResourceType::Crystal],
+    world.resources[Game::ResourceType::Terraformation]
 end
 
 router.add "m" do
@@ -29,20 +29,20 @@ end
 router.add "harv {x} {y}" do |p|
   x = p["x"].to_i32
   y = p["y"].to_i32
-  world.push(Game::BuildCrystalHarvesterCommand.new(Point.new(x, y)))
+  world.push(Game::BuildCrystalHarvesterCommand.new(Game::Point.new(x, y)))
   printf "Build harvester at %d %d\n", x, y
 end
 
 router.add "rest {x} {y}" do |p|
   x = p["x"].to_i32
   y = p["y"].to_i32
-  world.push(Game::BuildCrystalRestorerCommand.new(Point.new(x, y)))
+  world.push(Game::BuildCrystalRestorerCommand.new(Game::Point.new(x, y)))
 end
 
 router.add "terr {x} {y}" do |p|
   x = p["x"].to_i32
   y = p["y"].to_i32
-  world.push(Game::BuildTerraformerCommand.new(Point.new(x, y)))
+  world.push(Game::BuildTerraformerCommand.new(Game::Point.new(x, y)))
 end
 
 def normalize_command(cmd)

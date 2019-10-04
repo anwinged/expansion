@@ -1,2 +1,4 @@
-class NotEnoughtResources < Exception
+module Game
+  class NotEnoughtResources < Exception
+  end
 end

@@ -6,7 +6,7 @@ class Game::World
   def initialize(@ts = 0)
     @map = Map.new
     @resources = Resources.new
-    @tasks = App::Queue.new
+    @tasks = Queue.new
   end
 
   getter ts

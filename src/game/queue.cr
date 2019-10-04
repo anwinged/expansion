@@ -1,4 +1,4 @@
-class App::Queue
+class Game::Queue
   struct Item
     def initialize(@ts : Int32, @command : Game::Command)
     end

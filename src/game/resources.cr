@@ -1,11 +1,11 @@
 require "./exception"
 
-enum ResourceType
+enum Game::ResourceType
   Crystal
   Terraformation
 end
 
-class Resources
+class Game::Resources
   def initialize
     @values = {} of ResourceType => Int32
     ResourceType.each do |t|

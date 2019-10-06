@@ -11,7 +11,7 @@ world = Game::World.new(ts)
 router = CLI::CommandRouter.new
 
 router.add "st" do
-  printf "Stat:\n  Crystals: %d\n  Tarraform: %d\n",
+  printf "Stat:\n  Crystals: %d\n  Terraformation: %d\n",
     world.resources[Game::ResourceType::Crystal],
     world.resources[Game::ResourceType::Terraformation]
 end
@@ -89,6 +89,9 @@ loop do
   current_time = Time.local.to_unix
   world.run current_time
   printf "Now: %s\n\n", Time.unix(world.ts).to_local.to_s
+  if world.win?
+    printf "YOU WIN!!!\n\n"
+  end
   router.handle cmd
   printf "\n"
 end

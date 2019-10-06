@@ -32,4 +32,8 @@ class Game::World
     end
     @ts = ts
   end
+
+  def win?
+    @resources[ResourceType::Terraformation] >= 100
+  end
 end

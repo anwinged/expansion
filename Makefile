@@ -14,13 +14,13 @@ build:
 	mkdir -p build
 	./crystal build $(ENTRY_POINT) --release --no-debug --static -o build/$(APP_NAME)
 
-.PHONY: run
-run: format
-	./crystal run $(ENTRY_POINT)
-
 .PHONY: format
 format:
 	./crystal tool format ./src ./spec
+
+.PHONY: run
+run: format
+	./crystal run $(ENTRY_POINT)
 
 .PHONY: spec
 spec: format

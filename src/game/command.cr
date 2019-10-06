@@ -4,6 +4,7 @@ module Game
   abstract class Command
     abstract def start(world : World) : Int32
     abstract def finish(world : World)
+    abstract def desc : String
   end
 
   class BuildCrystalHarvesterCommand < Command
@@ -20,6 +21,10 @@ module Game
     def finish(world : World)
       world.map.set(CrystalHarvesterTile.new(@point))
       world.push(HarvestCrystalCommand.new(@point))
+    end
+
+    def desc : String
+      sprintf "Build harvester site at %d,%d", @point.x, @point.y
     end
   end
 
@@ -48,6 +53,10 @@ module Game
     def finish(world : World)
       world.resources.inc(ResourceType::Crystal, @value)
       world.push(HarvestCrystalCommand.new(@point))
+    end
+
+    def desc : String
+      sprintf "Harvest crystals at %d,%d", @point.x, @point.y
     end
 
     private def nearest_deposit(world : World)
@@ -80,6 +89,10 @@ module Game
       world.map.set(CrystalRestorerTile.new(@point))
       world.push(RestoreCrystalCommand.new(@point))
     end
+
+    def desc : String
+      sprintf "Build crystal restorer at %d,%d", @point.x, @point.y
+    end
   end
 
   class RestoreCrystalCommand < Command
@@ -109,6 +122,10 @@ module Game
       world.push(RestoreCrystalCommand.new(@point))
     end
 
+    def desc : String
+      sprintf "Restore crystals at %d,%d", @point.x, @point.y
+    end
+
     private def nearest_deposit(world : World)
       world.map.nearest_tile @point do |tile|
         tile.has_role(TileRole::CrystalDeposits) && tile.cur < tile.cap
@@ -133,6 +150,10 @@ module Game
       world.map.set(TerraformerTile.new(@point))
       world.push(TerraformCommand.new(@point))
     end
+
+    def desc : String
+      sprintf "Build terraformer at %d,%d", @point.x, @point.y
+    end
   end
 
   class TerraformCommand < Command
@@ -144,6 +165,10 @@ module Game
 
     def start(world : World) : Int32
       PRODUCTION_TIME
+    end
+
+    def desc : String
+      "Terraform planet"
     end
 
     def finish(world : World)

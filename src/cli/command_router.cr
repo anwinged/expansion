@@ -15,19 +15,19 @@ class CLI::CommandRouter
     @routes = [] of Route
   end
 
-  def add(route, &block : RouteHandler)
-    pattern = route_to_regex(route)
-    @routes.push(Route.new(route, pattern, "", block))
+  def add(route : String, &block : RouteHandler)
+    add(route, "", &block)
   end
 
-  def add(route, desc, &block : RouteHandler)
+  def add(route : String, desc : String, &block : RouteHandler)
     pattern = route_to_regex(route)
     @routes.push(Route.new(route, pattern, desc, block))
   end
 
-  def handle(command)
+  def handle(command : String)
     @routes.each do |route|
-      handle_pattern(command, route.pattern, route.handler)
+      result = handle_pattern(command, route.pattern, route.handler)
+      break if result
     end
   end
 
@@ -35,14 +35,15 @@ class CLI::CommandRouter
     @routes
   end
 
-  private def handle_pattern(command, pattern, cb)
+  private def handle_pattern(command, pattern, cb) : Bool
     m = command.match(pattern)
-    return if m.nil?
+    return false if m.nil?
     groups = m.named_captures
     nil_groups = groups.select { |k, v| v.nil? }
-    return if nil_groups.size != 0
+    return false if nil_groups.size != 0
     params = groups.transform_values { |v| v.to_s }
     cb.call params
+    true
   end
 
   private def route_to_regex(route) : Regex

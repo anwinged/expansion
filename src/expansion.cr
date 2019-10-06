@@ -6,20 +6,6 @@ world = Game::World.new(ts)
 
 router = CLI::CommandRouter.new
 
-router.add "h", "Show all commands" do |p|
-  printf "Commands:\n"
-  router.routes.each do |r|
-    printf "  %s - %s\n", r.route, r.desc
-  end
-end
-
-router.add "q", "Show command queue" do |p|
-  items = world.queue.top(5)
-  items.each do |i|
-    printf "%s, %s\n", Time.unix(i.ts).to_local.to_s, typeof(i.command)
-  end
-end
-
 router.add "harv {x} {y}", "Build harvester at x,y" do |p|
   x = p["x"].to_i32
   y = p["y"].to_i32
@@ -40,6 +26,13 @@ router.add "terr {x} {y}", "Build terraformator at x,y" do |p|
   y = p["y"].to_i32
   point = Game::Point.new(x, y)
   world.push(Game::BuildTerraformerCommand.new(point))
+end
+
+router.add "help", "Show all commands" do |p|
+  printf "Commands:\n"
+  router.routes.each do |r|
+    printf "  %s - %s\n", r.route, r.desc
+  end
 end
 
 def render_map(world)
@@ -70,6 +63,17 @@ def render_map(world)
   end
 end
 
+def render_commands(world)
+  items = world.queue.top(5)
+  if items.size != 0
+    printf "Queue:\n"
+  end
+  time = ->(ts : Int64) { Time.unix(ts).to_local.to_s }
+  items.each do |i|
+    printf "  %s, %s\n", time.call(i.ts), i.command.desc
+  end
+end
+
 def render_resources(world)
   printf "Resources:\n  Crystals:       %5d\n  Terraformation: %5d\n",
     world.resources[Game::ResourceType::Crystal],
@@ -77,10 +81,12 @@ def render_resources(world)
 end
 
 def render_world(world)
-  printf "Now: %s\n\n", Time.unix(world.ts).to_local.to_s
+  printf "Now:\n  %s\n\n", Time.unix(world.ts).to_local.to_s
   if world.win?
     printf "YOU WIN!!!\n\n"
   end
+  render_commands world
+  printf "\n"
   render_resources world
   printf "\n"
   render_map world

@@ -10,6 +10,10 @@ macro define_dummy_classes(count)
 
       def finish(world)
       end
+
+      def desc : String
+        ""
+      end
     end
   {% end %}
 end

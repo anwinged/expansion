@@ -39,7 +39,7 @@ module Game
     end
 
     def get(x : Int32, y : Int32) : Tile
-      @data[key(Point.new(x, y))]
+      get(Point.new(x, y))
     end
 
     def set(tile : Tile)
@@ -73,15 +73,6 @@ module Game
         end
       end
       seek_tile
-    end
-
-    def print
-      (0...SIZE).each do |x|
-        (0...SIZE).each do |y|
-          printf "%c", @data[key(Point.new(x, y))].letter
-        end
-        printf "\n"
-      end
     end
 
     private def key(p : Point) : String

@@ -1,5 +1,6 @@
 module Game
   enum TileRole
+    ConstructionSite
     CrystalDeposits
     CrystalHarvester
     CrystalRestorer
@@ -37,6 +38,10 @@ module Game
       charged = @cur + value
       @cur = charged <= @cap ? charged : @cap
     end
+
+    def can_build?
+      @role == TileRole::Plateau
+    end
   end
 
   class PlateauTile < Tile
@@ -46,6 +51,16 @@ module Game
 
     def has_role(role : TileRole) : Bool
       role == TileRole::Plateau
+    end
+  end
+
+  class ConstructionSiteTile < Tile
+    def letter : Char
+      '_'
+    end
+
+    def has_role(role : TileRole) : Bool
+      role == TileRole::ConstructionSite
     end
   end
 

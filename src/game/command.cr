@@ -13,6 +13,7 @@ module Game
     end
 
     def start(world : World) : Int32
+      world.map.set(ConstructionSiteTile.new(@point))
       BUILD_TIME
     end
 
@@ -71,6 +72,7 @@ module Game
 
     def start(world : World) : Int32
       world.resources.dec(ResourceType::Crystal, CRYSTALS_COST)
+      world.map.set(ConstructionSiteTile.new(@point))
       BUILD_TIME
     end
 
@@ -122,6 +124,7 @@ module Game
     end
 
     def start(world : World) : Int32
+      world.map.set(ConstructionSiteTile.new(@point))
       world.resources.dec(ResourceType::Crystal, CRYSTALS_COST)
       BUILD_TIME
     end

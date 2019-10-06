@@ -40,4 +40,17 @@ describe CLI::CommandRouter do
     router.handle "plus 1 3 6"
     x.should eq 10
   end
+
+  it "should match commands from begin of string" do
+    router = CLI::CommandRouter.new
+    x = 5
+    router.add "plus" do |p|
+      x += 10
+    end
+    router.add "mult and plus" do |p|
+      x = x * 2 + 10
+    end
+    router.handle "mult and plus"
+    x.should eq 20
+  end
 end

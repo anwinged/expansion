@@ -25,6 +25,10 @@ class CLI::CommandRouter
   end
 
   private def route_to_regex(route) : Regex
+    Regex.new('^' + split_route route)
+  end
+
+  private def split_route(route) : String
     vals = route.partition(/\{[a-z]+?\}/)
     param = vals[1].lstrip('{').rstrip('}')
     result = ""
@@ -35,8 +39,8 @@ class CLI::CommandRouter
       result += sprintf "(?P<%s>.+?)", param
     end
     if vals[2] != ""
-      result += route_to_regex(vals[2]).source
+      result += split_route(vals[2])
     end
-    Regex.new(result)
+    result
   end
 end

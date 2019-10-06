@@ -47,6 +47,7 @@ def normalize_command(cmd)
   cmd.downcase.gsub(/\s+/, ' ').strip
 end
 
+printf "\u{001b}[2J"
 loop do
   printf "In > "
   cmd = read_line()
@@ -54,8 +55,10 @@ loop do
   if norm == "exit"
     break
   end
+  printf "\u{001b}[2J"
   current_time = Time.local.to_unix
   world.run current_time
+  printf "Now: %s\n\n", Time.unix(world.ts).to_local.to_s
   router.handle cmd
   printf "\n"
 end

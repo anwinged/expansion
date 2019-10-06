@@ -18,7 +18,31 @@ router.add "st" do
 end
 
 router.add "m" do
-  world.map.print
+  size = world.map.size
+  (0...size).each do |x|
+    if x == 0
+      printf "+"
+      (0...size).each do |y|
+        printf "---+"
+      end
+      print "\n"
+    end
+    printf "|"
+    (0...size).each do |y|
+      printf "%c%d%d|", world.map.get(x, y).letter, x, y
+    end
+    print "\n"
+    printf "|"
+    (0...size).each do |y|
+      printf "%3d|", world.map.get(x, y).cur
+    end
+    print "\n"
+    printf "+"
+    (0...size).each do |y|
+      printf "---+"
+    end
+    print "\n"
+  end
 end
 
 router.add "harv {x} {y}" do |p|

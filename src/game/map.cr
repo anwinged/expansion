@@ -30,8 +30,16 @@ module Game
       self.set(CrystalTile.new(Point.new(2, 2), 100))
     end
 
+    def size
+      SIZE
+    end
+
     def get(point : Point) : Tile
       @data[key(point)]
+    end
+
+    def get(x : Int32, y : Int32) : Tile
+      @data[key(Point.new(x, y))]
     end
 
     def set(tile : Tile)

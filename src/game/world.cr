@@ -3,7 +3,7 @@ require "./resources"
 class Game::World
   property ts : Int64
 
-  def initialize(@ts = 0)
+  def initialize(@ts = 0_i64)
     @map = Map.new
     @resources = Resources.new
     @tasks = Queue.new

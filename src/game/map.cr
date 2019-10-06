@@ -15,7 +15,7 @@ module Game
   end
 
   class Map
-    SIZE = 4
+    SIZE = 5
 
     def initialize
       @data = {} of String => Tile
@@ -25,9 +25,9 @@ module Game
         end
       end
       self.set(MainBaseTile.new(Point.new(0, 0)))
-      self.set(CrystalTile.new(Point.new(1, 1), 100))
-      self.set(CrystalTile.new(Point.new(3, 1), 200))
-      self.set(CrystalTile.new(Point.new(2, 2), 100))
+      self.set(CrystalTile.new(Point.new(1, 2), 100))
+      self.set(CrystalTile.new(Point.new(4, 2), 200))
+      self.set(CrystalTile.new(Point.new(3, 3), 100))
     end
 
     def size

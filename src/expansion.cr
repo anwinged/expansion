@@ -41,23 +41,34 @@ def render_map(world)
     if x == 0
       printf "+"
       (0...size).each do |y|
-        printf "---+"
+        printf "-----+"
       end
       print "\n"
     end
     printf "|"
     (0...size).each do |y|
-      printf "%c%d%d|", world.map.get(x, y).letter, x, y
+      tile = world.map.get(x, y)
+      printf "%c  %d%d|", tile.letter, x, y
     end
     print "\n"
     printf "|"
     (0...size).each do |y|
-      printf "%3d|", world.map.get(x, y).cur
+      printf "     |"
+    end
+    print "\n"
+    printf "|"
+    (0...size).each do |y|
+      tile = world.map.get(x, y)
+      if tile.letter == 'f'
+        printf "%5d|", world.map.get(x, y).cur
+      else
+        printf "     |", world.map.get(x, y).cur
+      end
     end
     print "\n"
     printf "+"
     (0...size).each do |y|
-      printf "---+"
+      printf "-----+"
     end
     print "\n"
   end

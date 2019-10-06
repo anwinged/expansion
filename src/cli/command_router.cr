@@ -1,17 +1,38 @@
 class CLI::CommandRouter
-  def initialize
-    @mappings = [] of {Regex, Proc(Hash(String, String), Nil)}
+  alias RouteHandler = Proc(Hash(String, String), Nil)
+
+  struct Route
+    def initialize(@route : String, @pattern : Regex, @desc : String, @handler : RouteHandler)
+    end
+
+    getter route
+    getter pattern
+    getter desc
+    getter handler
   end
 
-  def add(route, &block : Hash(String, String) -> Nil)
+  def initialize
+    @routes = [] of Route
+  end
+
+  def add(route, &block : RouteHandler)
     pattern = route_to_regex(route)
-    @mappings.push({pattern, block})
+    @routes.push(Route.new(route, pattern, "", block))
+  end
+
+  def add(route, desc, &block : RouteHandler)
+    pattern = route_to_regex(route)
+    @routes.push(Route.new(route, pattern, desc, block))
   end
 
   def handle(command)
-    @mappings.each do |handler|
-      handle_pattern(command, *handler)
+    @routes.each do |route|
+      handle_pattern(command, route.pattern, route.handler)
     end
+  end
+
+  def routes
+    @routes
   end
 
   private def handle_pattern(command, pattern, cb)

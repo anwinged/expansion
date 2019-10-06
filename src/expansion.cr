@@ -10,14 +10,21 @@ world = Game::World.new(ts)
 
 router = CLI::CommandRouter.new
 
-router.add "q" do |p|
+router.add "h", "Show all commands" do |p|
+  printf "Commands:\n"
+  router.routes.each do |r|
+    printf "  %s - %s\n", r.route, r.desc
+  end
+end
+
+router.add "q", "Show command queue" do |p|
   items = world.queue.top(5)
   items.each do |i|
     printf "%s, %s\n", Time.unix(i.ts).to_local.to_s, typeof(i.command)
   end
 end
 
-router.add "harv {x} {y}" do |p|
+router.add "harv {x} {y}", "Build harvester at x,y" do |p|
   x = p["x"].to_i32
   y = p["y"].to_i32
   point = Game::Point.new(x, y)
@@ -25,14 +32,14 @@ router.add "harv {x} {y}" do |p|
   printf "Build harvester at %d %d\n", x, y
 end
 
-router.add "rest {x} {y}" do |p|
+router.add "rest {x} {y}", "Build restorer at x,y" do |p|
   x = p["x"].to_i32
   y = p["y"].to_i32
   point = Game::Point.new(x, y)
   world.push(Game::BuildCrystalRestorerCommand.new(point))
 end
 
-router.add "terr {x} {y}" do |p|
+router.add "terr {x} {y}", "Build terraformator at x,y" do |p|
   x = p["x"].to_i32
   y = p["y"].to_i32
   point = Game::Point.new(x, y)

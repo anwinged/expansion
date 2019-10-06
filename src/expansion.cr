@@ -1,9 +1,5 @@
-require "./game/command"
-require "./game/map"
-require "./game/queue"
-require "./game/resources"
-require "./game/world"
-require "./cli/command_router"
+require "./game/**"
+require "./cli/**"
 
 ts = Time.local.to_unix
 world = Game::World.new(ts)

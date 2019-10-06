@@ -11,8 +11,7 @@ world = Game::World.new(ts)
 router = CLI::CommandRouter.new
 
 router.add "st" do
-  printf "Stat:\n\tTime: %s\n\tCrystals: %d\n\tTarraform: %d\n",
-    Time.unix(world.ts).to_local.to_s,
+  printf "Stat:\n  Crystals: %d\n  Tarraform: %d\n",
     world.resources[Game::ResourceType::Crystal],
     world.resources[Game::ResourceType::Terraformation]
 end
@@ -42,6 +41,13 @@ router.add "m" do
       printf "---+"
     end
     print "\n"
+  end
+end
+
+router.add "q" do |p|
+  items = world.queue.top(5)
+  items.each do |i|
+    printf "%s, %s\n", Time.unix(i.ts).to_local.to_s, typeof(i.command)
   end
 end
 

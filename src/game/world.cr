@@ -6,22 +6,23 @@ class Game::World
   def initialize(@ts = 0_i64)
     @map = Map.new
     @resources = Resources.new
-    @tasks = Queue.new
+    @queue = Queue.new
   end
 
   getter ts
   getter resources
   getter map
+  getter queue
 
   def push(command : Command)
     dur = command.start(self)
     done_at = @ts + dur.to_i64
-    @tasks.push(done_at, command)
+    @queue.push(done_at, command)
   end
 
   def run(ts : Int64)
     loop do
-      item = @tasks.pop(ts)
+      item = @queue.pop(ts)
       if item.nil?
         break
       end

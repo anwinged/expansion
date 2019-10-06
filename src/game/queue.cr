@@ -1,6 +1,6 @@
 class Game::Queue
   struct Item
-    def initialize(@ts : Int64, @command : Game::Command)
+    def initialize(@ts : Int64, @command : Command)
     end
 
     getter ts
@@ -11,7 +11,7 @@ class Game::Queue
     @data = [] of Item
   end
 
-  def push(ts : Int64, value : Game::Command)
+  def push(ts : Int64, value : Command)
     # very unoptimal algo
     @data.push(Item.new(ts, value))
     @data.sort! do |a, b|
@@ -24,5 +24,9 @@ class Game::Queue
       return nil
     end
     @data[-1].ts <= ts ? @data.pop : nil
+  end
+
+  def top(n : Int32)
+    @data.last(n).reverse!
   end
 end

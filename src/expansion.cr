@@ -120,6 +120,10 @@ loop do
   printf "\u{001b}[2J"
   current_time = Time.local.to_unix
   world.run current_time
-  router.handle cmd
+  begin
+    router.handle cmd
+  rescue Game::NotEnoughtResources
+    printf ">>> Not enought resources <<<\n"
+  end
   printf "\n"
 end

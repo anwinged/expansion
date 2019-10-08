@@ -142,7 +142,7 @@ module Game
   end
 
   class BuildTerraformerCommand < Command
-    CRYSTALS_COST = 100
+    CRYSTALS_COST = 300
     BUILD_TIME    = 120
 
     def initialize(@point : Point)

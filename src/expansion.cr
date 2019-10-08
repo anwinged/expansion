@@ -15,14 +15,14 @@ router.add "harv {x} {y}", "Build harvester at x,y" do |p|
   printf "Build harvester at %d %d\n", x, y
 end
 
-router.add "rest {x} {y}", "Build restorer at x,y" do |p|
+router.add "rest {x} {y}", "Build restorer at x,y (100 cr)" do |p|
   x = p["x"].to_i32
   y = p["y"].to_i32
   point = Game::Point.new(x, y)
   world.push(Game::BuildCrystalRestorerCommand.new(point))
 end
 
-router.add "terr {x} {y}", "Build terraformator at x,y" do |p|
+router.add "terr {x} {y}", "Build terraformator at x,y (300 cr)" do |p|
   x = p["x"].to_i32
   y = p["y"].to_i32
   point = Game::Point.new(x, y)

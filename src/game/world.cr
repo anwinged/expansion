@@ -2,19 +2,21 @@ require "./resources"
 
 class Game::World
   property ts : Int64
-  property win_ts : Int64?
 
   def initialize(@ts = 0_i64)
+    @start_ts = @ts
     @map = Map.new
     @resources = Resources.new
     @queue = Queue.new
+    @finished = false
+    @score = 0
   end
 
   getter ts
   getter resources
   getter map
   getter queue
-  getter win_ts
+  getter score
 
   def push(command : Command)
     dur = command.start(self)
@@ -31,8 +33,9 @@ class Game::World
       command = item.command
       @ts = item.ts
       command.finish(self)
-      if win?
-        @win_ts = @ts
+      if win? && !@finished
+        @finished = true
+        @score = Math.max(0, (@start_ts + 3600 - @ts).to_i32)
       end
     end
     @ts = ts
@@ -40,14 +43,5 @@ class Game::World
 
   def win?
     @resources[ResourceType::Terraformation] >= 100
-  end
-
-  def score
-    case @win_ts
-    when Int64
-      Math.max(0, 3600_i64 - @win_ts.as(Int64))
-    else
-      0
-    end
   end
 end

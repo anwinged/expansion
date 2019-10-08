@@ -1,3 +1,4 @@
+require "colorize"
 require "./game/**"
 require "./cli/**"
 
@@ -41,34 +42,34 @@ def render_map(world)
     if x == 0
       printf "+"
       (0...size).each do |y|
-        printf "-----+"
+        printf "------+"
       end
       print "\n"
     end
     printf "|"
     (0...size).each do |y|
       tile = world.map.get(x, y)
-      printf "%c  %d%d|", tile.letter, x, y
+      printf "%s   %d%d|", tile.letter.colorize(:green), x, y
     end
     print "\n"
     printf "|"
     (0...size).each do |y|
-      printf "     |"
+      printf "      |"
     end
     print "\n"
     printf "|"
     (0...size).each do |y|
       tile = world.map.get(x, y)
       if tile.letter == 'f'
-        printf "%5d|", world.map.get(x, y).cur
+        printf "%6d|", world.map.get(x, y).cur
       else
-        printf "     |", world.map.get(x, y).cur
+        printf "      |", world.map.get(x, y).cur
       end
     end
     print "\n"
     printf "+"
     (0...size).each do |y|
-      printf "-----+"
+      printf "------+"
     end
     print "\n"
   end

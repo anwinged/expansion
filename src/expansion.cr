@@ -85,8 +85,15 @@ def render_commands(world)
   if items.size != 0
     printf "Queue:\n"
   end
+  wts = world.ts
   items.each do |i|
-    printf "  %s, %s\n", render_time(i.ts), i.command.desc
+    ts_diff = i.ts - wts
+    if ts_diff < 60
+      done_time = sprintf " %02ds", ts_diff
+    else
+      done_time = sprintf "%d:%02d", ts_diff // 60, ts_diff % 60
+    end
+    printf "  %s, %s, %s\n", render_time(i.ts), done_time, i.command.desc
   end
 end
 

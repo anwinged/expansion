@@ -36,6 +36,11 @@ router.add "help", "Show all commands" do |p|
   end
 end
 
+def render_time(ts)
+  t = Time.unix(ts).in(Time::Location.load("Europe/Moscow"))
+  t.to_s("%H:%M:%S")
+end
+
 def render_map(world)
   size = world.map.size
   (0...size).each do |x|
@@ -80,9 +85,8 @@ def render_commands(world)
   if items.size != 0
     printf "Queue:\n"
   end
-  time = ->(ts : Int64) { Time.unix(ts).to_local.to_s }
   items.each do |i|
-    printf "  %s, %s\n", time.call(i.ts), i.command.desc
+    printf "  %s, %s\n", render_time(i.ts), i.command.desc
   end
 end
 
@@ -93,7 +97,7 @@ def render_resources(world)
 end
 
 def render_world(world)
-  printf "Now:\n  %s\n\n", Time.unix(world.ts).to_local.to_s
+  printf "Now:\n  %s\n\n", render_time(world.ts)
   if world.win?
     printf "YOU WIN!!!\n\n"
   end

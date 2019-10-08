@@ -40,7 +40,7 @@ module Game
     end
 
     def can_build?
-      @role == TileRole::Plateau
+      has_role(TileRole::Plateau)
     end
   end
 

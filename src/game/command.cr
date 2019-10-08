@@ -14,6 +14,10 @@ module Game
     end
 
     def start(world : World) : Int32
+      tile = world.map.get(@point)
+      if !tile.can_build?
+        raise InvalidPlaceForBuilding.new
+      end
       world.map.set(ConstructionSiteTile.new(@point))
       BUILD_TIME
     end
@@ -80,6 +84,10 @@ module Game
     end
 
     def start(world : World) : Int32
+      tile = world.map.get(@point)
+      if !tile.can_build?
+        raise InvalidPlaceForBuilding.new
+      end
       world.resources.dec(ResourceType::Crystal, CRYSTALS_COST)
       world.map.set(ConstructionSiteTile.new(@point))
       BUILD_TIME
@@ -141,8 +149,12 @@ module Game
     end
 
     def start(world : World) : Int32
-      world.map.set(ConstructionSiteTile.new(@point))
+      tile = world.map.get(@point)
+      if !tile.can_build?
+        raise InvalidPlaceForBuilding.new
+      end
       world.resources.dec(ResourceType::Crystal, CRYSTALS_COST)
+      world.map.set(ConstructionSiteTile.new(@point))
       BUILD_TIME
     end
 

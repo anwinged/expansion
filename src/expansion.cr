@@ -124,6 +124,8 @@ loop do
     router.handle cmd
   rescue Game::NotEnoughtResources
     printf ">>> Not enought resources <<<\n"
+  rescue Game::InvalidPlaceForBuilding
+    printf ">>> Can't build here <<<\n"
   end
   printf "\n"
 end

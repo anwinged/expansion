@@ -1,4 +1,10 @@
 module Game
-  class NotEnoughtResources < Exception
+  class BaseException < Exception
+  end
+
+  class NotEnoughtResources < BaseException
+  end
+
+  class InvalidPlaceForBuilding < BaseException
   end
 end

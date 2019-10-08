@@ -113,7 +113,9 @@ def normalize_command(cmd)
   cmd.downcase.gsub(/\s+/, ' ').strip
 end
 
-printf "\u{001b}[2J"
+CLEAR_SCREEN_ESC_CODE = "\u{001b}[2J"
+
+printf CLEAR_SCREEN_ESC_CODE
 loop do
   render_world world
   printf "In > "
@@ -122,7 +124,7 @@ loop do
   if norm == "exit"
     break
   end
-  printf "\u{001b}[2J"
+  printf CLEAR_SCREEN_ESC_CODE
   current_time = Time.local.to_unix
   world.run current_time
   begin

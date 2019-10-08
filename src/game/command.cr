@@ -170,13 +170,22 @@ module Game
 
   class TerraformCommand < Command
     PRODUCTION_TIME  = 60
+    REST_TIME        = 20
     PRODUCTION_VALUE =  5
+    CRYSTAL_REQUIRED = 50
 
     def initialize(@point : Point)
+      @can_terr = false
     end
 
     def start(world : World) : Int32
-      PRODUCTION_TIME
+      if world.resources.has(ResourceType::Crystal, CRYSTAL_REQUIRED)
+        world.resources.dec(ResourceType::Crystal, CRYSTAL_REQUIRED)
+        @can_terr = true
+        PRODUCTION_TIME
+      else
+        REST_TIME
+      end
     end
 
     def desc : String
@@ -184,7 +193,9 @@ module Game
     end
 
     def finish(world : World)
-      world.resources.inc(ResourceType::Terraformation, PRODUCTION_VALUE)
+      if @can_terr
+        world.resources.inc(ResourceType::Terraformation, PRODUCTION_VALUE)
+      end
       world.push(TerraformCommand.new(@point))
     end
   end

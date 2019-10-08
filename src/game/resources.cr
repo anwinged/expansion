@@ -17,6 +17,10 @@ class Game::Resources
     @values[t]
   end
 
+  def has(t : ResourceType, value : Int32) : Bool
+    @values[t] >= value
+  end
+
   def inc(t : ResourceType, value : Int32)
     new_value = @values[t] + value
     if new_value < 0

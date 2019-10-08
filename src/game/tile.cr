@@ -46,7 +46,7 @@ module Game
 
   class PlateauTile < Tile
     def letter : Char
-      '.'
+      ' '
     end
 
     def has_role(role : TileRole) : Bool
@@ -66,7 +66,7 @@ module Game
 
   class MainBaseTile < Tile
     def letter : Char
-      'H'
+      'W'
     end
 
     def has_role(role : TileRole) : Bool
@@ -81,7 +81,7 @@ module Game
     end
 
     def letter : Char
-      'f'
+      'v'
     end
 
     def has_role(role : TileRole) : Bool
@@ -91,7 +91,7 @@ module Game
 
   class CrystalHarvesterTile < Tile
     def letter : Char
-      'm'
+      'H'
     end
 
     def has_role(role : TileRole) : Bool
@@ -101,7 +101,7 @@ module Game
 
   class CrystalRestorerTile < Tile
     def letter : Char
-      'h'
+      'R'
     end
 
     def has_role(role : TileRole) : Bool

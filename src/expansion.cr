@@ -108,7 +108,7 @@ end
 def render_world(world)
   printf "Now:\n  %s\n\n", render_time(world.ts)
   if world.win?
-    printf "YOU WIN!!!\n\n"
+    printf "YOU WIN!!! Score: %d\n\n", world.score
   end
   render_commands world
   printf "\n"

@@ -38,7 +38,9 @@ end
 
 def render_time(ts)
   t = Time.unix(ts).in(Time::Location.load("Europe/Moscow"))
-  t.to_s("%H:%M:%S")
+  # It's future, baby
+  t += 200.years
+  t.to_s("%Y-%m-%d %H:%M:%S")
 end
 
 def render_map(world)

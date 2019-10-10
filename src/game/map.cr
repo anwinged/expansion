@@ -15,14 +15,21 @@ module Game
   end
 
   class Map
-    SIZE = 5
+    alias TileRow = Array(Tile)
+    alias DataArray = Array(TileRow)
 
-    def initialize
-      @data = {} of String => Tile
-      (0...SIZE).each do |x|
-        (0...SIZE).each do |y|
-          self.set(PlateauTile.new(Point.new(x, y)))
+    property data : DataArray
+
+    def initialize(rows : Int32, cols : Int32)
+      @rows = rows
+      @cols = cols
+      @data = DataArray.new @rows
+      @rows.times do |row_index|
+        tile_row = TileRow.new @cols
+        @cols.times do |col_index|
+          tile_row << PlateauTile.new(Point.new(row_index, col_index))
         end
+        @data << tile_row
       end
       self.set(MainBaseTile.new(Point.new(0, 0)))
       self.set(CrystalTile.new(Point.new(1, 2), 100))
@@ -30,29 +37,28 @@ module Game
       self.set(CrystalTile.new(Point.new(3, 3), 100))
     end
 
-    def size
-      SIZE
-    end
+    getter rows
+    getter cols
 
     def get(point : Point) : Tile
-      @data[key(point)]
+      @data[point.x][point.y]
     end
 
     def get(x : Int32, y : Int32) : Tile
-      get(Point.new(x, y))
+      get Point.new(x, y)
     end
 
     def set(tile : Tile)
-      @data[key(tile.point)] = tile
+      set tile.point, tile
     end
 
     def set(point : Point, tile : Tile)
-      @data[key(point)] = tile
+      @data[point.x][point.y] = tile
     end
 
     def tiles
-      (0...SIZE).each do |x|
-        (0...SIZE).each do |y|
+      (0...@rows).each do |x|
+        (0...@cols).each do |y|
           point = Point.new(x, y)
           tile = self.get(point)
           yield point, tile
@@ -74,9 +80,8 @@ module Game
       end
       seek_tile
     end
+  end
 
-    private def key(p : Point) : String
-      return sprintf "%d:%d", p.x, p.y
-    end
+  class MapGenerator
   end
 end

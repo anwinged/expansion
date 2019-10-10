@@ -5,7 +5,7 @@ class Game::World
 
   def initialize(@ts = 0_i64)
     @start_ts = @ts
-    @map = Map.new
+    @map = Map.new 5, 5
     @resources = Resources.new
     @queue = Queue.new
     @finished = false

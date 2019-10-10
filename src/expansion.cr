@@ -44,28 +44,29 @@ def render_time(ts)
 end
 
 def render_map(world)
-  size = world.map.size
-  (0...size).each do |x|
+  rows = world.map.rows
+  cols = world.map.cols
+  (0...rows).each do |x|
     if x == 0
       printf "+"
-      (0...size).each do |y|
+      (0...cols).each do |y|
         printf "------+"
       end
       print "\n"
     end
     printf "|"
-    (0...size).each do |y|
+    (0...cols).each do |y|
       tile = world.map.get(x, y)
       printf "%s   %d%d|", tile.letter.colorize(:green), x, y
     end
     print "\n"
     printf "|"
-    (0...size).each do |y|
+    (0...cols).each do |y|
       printf "      |"
     end
     print "\n"
     printf "|"
-    (0...size).each do |y|
+    (0...cols).each do |y|
       tile = world.map.get(x, y)
       if tile.letter == 'f'
         printf "%6d|", world.map.get(x, y).cur
@@ -75,7 +76,7 @@ def render_map(world)
     end
     print "\n"
     printf "+"
-    (0...size).each do |y|
+    (0...cols).each do |y|
       printf "------+"
     end
     print "\n"

@@ -3,7 +3,8 @@ require "../src/game/world"
 
 describe "World" do
   it "should build crystal harvester" do
-    world = Game::World.new
+    map = Game::Generator.make 5, 5
+    world = Game::World.new map
     point = Game::Point.new 2, 3
     cmd = Game::BuildCrystalHarvesterCommand.new(point)
     world.push(cmd)
@@ -12,7 +13,8 @@ describe "World" do
   end
 
   it "should fail when not enought resources" do
-    world = Game::World.new
+    map = Game::Generator.make 5, 5
+    world = Game::World.new map
     point = Game::Point.new 2, 3
     cmd = Game::BuildCrystalRestorerCommand.new(point)
     expect_raises(Game::NotEnoughtResources) do

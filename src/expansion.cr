@@ -2,8 +2,9 @@ require "colorize"
 require "./game/**"
 require "./cli/**"
 
+map = Game::Generator.make 5, 10
 ts = Time.local.to_unix
-world = Game::World.new(ts)
+world = Game::World.new map, ts
 
 router = CLI::CommandRouter.new
 

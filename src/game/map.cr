@@ -20,19 +20,15 @@ module Game
 
     property data : DataArray
 
-    def initialize(@rows : Int32, @cols : Int32)
+    def initialize(@rows : Int32, @cols : Int32, tile_type = PlateauTile)
       @data = DataArray.new @rows
       @rows.times do |row_index|
         tile_row = TileRow.new @cols
         @cols.times do |col_index|
-          tile_row << PlateauTile.new(Point.new(row_index, col_index))
+          tile_row << tile_type.new(Point.new(row_index, col_index))
         end
         @data << tile_row
       end
-      self.set(MainBaseTile.new(Point.new(0, 0)))
-      self.set(CrystalTile.new(Point.new(1, 2), 100))
-      self.set(CrystalTile.new(Point.new(4, 2), 200))
-      self.set(CrystalTile.new(Point.new(3, 3), 100))
     end
 
     getter rows
@@ -80,6 +76,14 @@ module Game
     end
   end
 
-  class MapGenerator
+  class Generator
+    def self.make(rows, cols) : Map
+      map = Map.new(rows, cols)
+      map.set(MainBaseTile.new(Point.new(0, 0)))
+      map.set(CrystalTile.new(Point.new(1, 2), 100))
+      map.set(CrystalTile.new(Point.new(4, 2), 200))
+      map.set(CrystalTile.new(Point.new(3, 3), 100))
+      map
+    end
   end
 end

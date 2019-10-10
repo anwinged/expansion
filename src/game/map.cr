@@ -20,9 +20,7 @@ module Game
 
     property data : DataArray
 
-    def initialize(rows : Int32, cols : Int32)
-      @rows = rows
-      @cols = cols
+    def initialize(@rows : Int32, @cols : Int32)
       @data = DataArray.new @rows
       @rows.times do |row_index|
         tile_row = TileRow.new @cols
@@ -56,7 +54,7 @@ module Game
       @data[point.x][point.y] = tile
     end
 
-    def tiles
+    def tiles(&block : Point, Tile -> _)
       (0...@rows).each do |x|
         (0...@cols).each do |y|
           point = Point.new(x, y)
@@ -66,7 +64,7 @@ module Game
       end
     end
 
-    def nearest_tile(point : Point, &block) : Tile | Nil
+    def nearest_tile(point : Point, &block : Tile -> Bool) : Tile | Nil
       seek_tile = nil
       min_dist = Int32::MAX
       tiles do |tile_point, tile|

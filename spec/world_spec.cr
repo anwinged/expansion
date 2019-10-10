@@ -1,11 +1,9 @@
 require "./spec_helper"
-require "../src/game/world"
 
 describe "World" do
   it "should build crystal harvester" do
-    map = Game::Generator.make 5, 5
-    world = Game::World.new map
-    point = Game::Point.new 2, 3
+    world = Game::World.new create_map_2x2
+    point = Game::Point.new 1, 0
     cmd = Game::BuildCrystalHarvesterCommand.new(point)
     world.push(cmd)
     world.run(100)
@@ -13,9 +11,8 @@ describe "World" do
   end
 
   it "should fail when not enought resources" do
-    map = Game::Generator.make 5, 5
-    world = Game::World.new map
-    point = Game::Point.new 2, 3
+    world = Game::World.new create_map_2x2
+    point = Game::Point.new 1, 0
     cmd = Game::BuildCrystalRestorerCommand.new(point)
     expect_raises(Game::NotEnoughtResources) do
       world.push(cmd)

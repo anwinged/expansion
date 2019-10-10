@@ -6,11 +6,13 @@ class Game::Resources
     Terraformation
   end
 
+  alias Capacity = Int32
+
   def initialize
-    @values = {} of Type => Int32
+    @values = {} of Type => Capacity
   end
 
-  def initialize(vals : Hash(Type, Int32))
+  def initialize(vals : Hash(Type, Capacity))
     @values = vals.clone
   end
 
@@ -18,11 +20,11 @@ class Game::Resources
     @values.fetch(t, 0)
   end
 
-  def has(t : Type, value : Int32) : Bool
+  def has(t : Type, value : Capacity) : Bool
     @values.fetch(t, 0) >= value
   end
 
-  def inc(t : Type, value : Int32)
+  def inc(t : Type, value : Capacity)
     new_value = @values.fetch(t, 0) + value
     if new_value < 0
       raise NotEnoughtResources.new
@@ -30,7 +32,7 @@ class Game::Resources
     @values[t] = new_value
   end
 
-  def dec(t : Type, value : Int32)
+  def dec(t : Type, value : Capacity)
     inc(t, -value)
   end
 end

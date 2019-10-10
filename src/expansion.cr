@@ -2,7 +2,7 @@ require "colorize"
 require "./game/**"
 require "./cli/**"
 
-map = Game::Generator.make 5, 10
+map = Game::Generator.make 5, 5
 ts = Time.local.to_unix
 world = Game::World.new map, ts
 
@@ -69,7 +69,7 @@ def render_map(world)
     printf "|"
     (0...cols).each do |y|
       tile = world.map.get(x, y)
-      if tile.letter == 'f'
+      if tile.letter == 'v'
         printf "%6d|", world.map.get(x, y).cur
       else
         printf "      |", world.map.get(x, y).cur

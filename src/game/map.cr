@@ -78,11 +78,14 @@ module Game
 
   class Generator
     def self.make(rows, cols) : Map
+      rnd = Random.new
       map = Map.new(rows, cols)
+      5.times do
+        pnt = Point.new(rnd.rand(0...rows), rnd.rand(0...cols))
+        cap = rnd.rand(2...6)
+        map.set(CrystalTile.new(pnt, cap * 50))
+      end
       map.set(MainBaseTile.new(Point.new(0, 0)))
-      map.set(CrystalTile.new(Point.new(1, 2), 100))
-      map.set(CrystalTile.new(Point.new(4, 2), 200))
-      map.set(CrystalTile.new(Point.new(3, 3), 100))
       map
     end
   end

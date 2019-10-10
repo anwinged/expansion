@@ -1,6 +1,4 @@
 require "./spec_helper"
-require "./../src/game/map"
-require "./../src/game/queue"
 
 describe Game::Point do
   p1 = Game::Point.new(0, 0)

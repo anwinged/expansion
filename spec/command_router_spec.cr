@@ -1,5 +1,4 @@
 require "./spec_helper"
-require "../src/cli/*"
 
 describe CLI::CommandRouter do
   it "should handle simple command as block" do

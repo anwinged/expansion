@@ -1,6 +1,4 @@
 require "./spec_helper"
-require "./../src/game/queue"
-require "./../src/game/command"
 
 macro define_dummy_classes(count)
   {% for i in (1...count) %}

@@ -103,8 +103,8 @@ end
 
 def render_resources(world)
   printf "Resources:\n  Crystals:       %5d\n  Terraformation: %5d\n",
-    world.resources[Game::ResourceType::Crystal],
-    world.resources[Game::ResourceType::Terraformation]
+    world.resources[Game::Resources::Type::Crystals],
+    world.resources[Game::Resources::Type::Terraformation]
 end
 
 def render_world(world)

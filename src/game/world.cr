@@ -41,6 +41,6 @@ class Game::World
   end
 
   def win?
-    @resources[ResourceType::Terraformation] >= 100
+    @resources[Resources::Type::Terraformation] >= 100
   end
 end

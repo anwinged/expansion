@@ -55,7 +55,7 @@ module Game
     end
 
     def finish(world : World)
-      world.resources.inc(ResourceType::Crystal, @value)
+      world.resources.inc(Resources::Type::Crystals, @value)
       world.push(HarvestCrystalCommand.new(@point))
     end
 
@@ -88,7 +88,7 @@ module Game
       if !tile.can_build?
         raise InvalidPlaceForBuilding.new
       end
-      world.resources.dec(ResourceType::Crystal, CRYSTALS_COST)
+      world.resources.dec(Resources::Type::Crystals, CRYSTALS_COST)
       world.map.set(ConstructionSiteTile.new(@point))
       BUILD_TIME
     end
@@ -153,7 +153,7 @@ module Game
       if !tile.can_build?
         raise InvalidPlaceForBuilding.new
       end
-      world.resources.dec(ResourceType::Crystal, CRYSTALS_COST)
+      world.resources.dec(Resources::Type::Crystals, CRYSTALS_COST)
       world.map.set(ConstructionSiteTile.new(@point))
       BUILD_TIME
     end
@@ -179,8 +179,8 @@ module Game
     end
 
     def start(world : World) : Int32
-      if world.resources.has(ResourceType::Crystal, CRYSTAL_REQUIRED)
-        world.resources.dec(ResourceType::Crystal, CRYSTAL_REQUIRED)
+      if world.resources.has(Resources::Type::Crystals, CRYSTAL_REQUIRED)
+        world.resources.dec(Resources::Type::Crystals, CRYSTAL_REQUIRED)
         @can_terr = true
         PRODUCTION_TIME
       else
@@ -194,7 +194,7 @@ module Game
 
     def finish(world : World)
       if @can_terr
-        world.resources.inc(ResourceType::Terraformation, PRODUCTION_VALUE)
+        world.resources.inc(Resources::Type::Terraformation, PRODUCTION_VALUE)
       end
       world.push(TerraformCommand.new(@point))
     end

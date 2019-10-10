@@ -1,35 +1,36 @@
 require "./exception"
 
-enum Game::ResourceType
-  Crystal
-  Terraformation
-end
-
 class Game::Resources
+  enum Type
+    Crystals
+    Terraformation
+  end
+
   def initialize
-    @values = {} of ResourceType => Int32
-    ResourceType.each do |t|
-      @values[t] = 0
-    end
+    @values = {} of Type => Int32
   end
 
-  def [](t : ResourceType)
-    @values[t]
+  def initialize(vals : Hash(Type, Int32))
+    @values = vals.clone
   end
 
-  def has(t : ResourceType, value : Int32) : Bool
-    @values[t] >= value
+  def [](t : Type)
+    @values.fetch(t, 0)
   end
 
-  def inc(t : ResourceType, value : Int32)
-    new_value = @values[t] + value
+  def has(t : Type, value : Int32) : Bool
+    @values.fetch(t, 0) >= value
+  end
+
+  def inc(t : Type, value : Int32)
+    new_value = @values.fetch(t, 0) + value
     if new_value < 0
       raise NotEnoughtResources.new
     end
     @values[t] = new_value
   end
 
-  def dec(t : ResourceType, value : Int32)
+  def dec(t : Type, value : Int32)
     inc(t, -value)
   end
 end

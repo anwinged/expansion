@@ -16,8 +16,13 @@ module Game
     end
 
     def start(world : World) : TimeSpan
+      construction = @building.construction
+      if !world.resources.has(construction.cost)
+        raise NotEnoughtResources.new
+      end
+      # @todo check requirements
       world.map.set(ConstructionSiteTile.new(@point))
-      @building.construction.ts
+      construction.ts
     end
 
     def finish(world : World)

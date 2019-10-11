@@ -1,5 +1,5 @@
 module Game
-  struct Production
+  class Production
     def initialize(@ts : TimeSpan, @input : Resources, @output : Resources)
     end
 
@@ -8,7 +8,7 @@ module Game
     getter output
   end
 
-  struct Restoration
+  class Restoration
     def initialize(@ts : TimeSpan, @type : Resources::Type, @cap : Capacity)
     end
 
@@ -17,7 +17,7 @@ module Game
     getter cap
   end
 
-  struct Construction
+  class Construction
     def initialize(@ts : TimeSpan, @cost : Resources, @requirements : Array(Building::Type))
     end
 

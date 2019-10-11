@@ -6,9 +6,9 @@ class Game::Resources
     Terraformation
   end
 
-  alias Capacity = Int32
-
   alias ResourceBag = Hash(Type, Capacity)
+
+  @values : ResourceBag
 
   def initialize(vals : ResourceBag | Nil = nil)
     @values = {} of Type => Capacity
@@ -37,6 +37,10 @@ class Game::Resources
     end
   end
 
+  def has(vs : self) : Bool
+    has vs.to_hash
+  end
+
   def inc(t : Type, value : Capacity)
     new_value = @values.fetch(t, 0) + value
     if new_value < 0
@@ -55,5 +59,9 @@ class Game::Resources
 
   def dec(t : Type, value : Capacity)
     inc(t, -value)
+  end
+
+  def to_hash : ResourceBag
+    @values.clone
   end
 end

@@ -1,8 +1,29 @@
 require "./spec_helper"
 
-describe Game::Resources do
-  it "should be created from hash" do
-    res = Game::Resources.new({Game::Resources::Type::Crystals => 100})
-    res[Game::Resources::Type::Crystals].should eq 100
+module Test::GameResources
+  alias Res = Game::Resources
+  alias ResType = Game::Resources::Type
+
+  describe Game::Resources do
+    it "should be created from hash" do
+      res = Res.new({ResType::Crystals => 100})
+      res[ResType::Crystals].should eq 100
+    end
+
+    it "should check single type" do
+      res = Res.new({ResType::Crystals => 100})
+      res.has(ResType::Crystals, 100).should be_true
+    end
+
+    it "should check resource bag" do
+      res = Res.new({ResType::Crystals => 100})
+      res.has({ResType::Crystals => 50}).should be_true
+      res.has({ResType::Crystals => 150}).should be_false
+    end
+
+    it "should check empty value" do
+      res = Res.new
+      res.has({ResType::Crystals => 50}).should be_false
+    end
   end
 end

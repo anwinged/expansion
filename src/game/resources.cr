@@ -8,12 +8,17 @@ class Game::Resources
 
   alias Capacity = Int32
 
-  def initialize
-    @values = {} of Type => Capacity
-  end
+  alias ResourceBag = Hash(Type, Capacity)
 
-  def initialize(vals : Hash(Type, Capacity))
-    @values = vals.clone
+  def initialize(vals : ResourceBag | Nil = nil)
+    @values = {} of Type => Capacity
+    Type.each { |t, v| @values[t] = 0 }
+    if vals.is_a?(ResourceBag)
+      vals.each do |i|
+        t, v = i
+        @values[t] = v
+      end
+    end
   end
 
   def [](t : Type)
@@ -21,7 +26,15 @@ class Game::Resources
   end
 
   def has(t : Type, value : Capacity) : Bool
-    @values.fetch(t, 0) >= value
+    @values[t] >= value
+  end
+
+  def has(vs : ResourceBag) : Bool
+    vs.reduce true do |acc, entry|
+      t = entry[0]
+      v = entry[1]
+      acc && @values[t] >= v
+    end
   end
 
   def inc(t : Type, value : Capacity)
@@ -30,6 +43,14 @@ class Game::Resources
       raise NotEnoughtResources.new
     end
     @values[t] = new_value
+  end
+
+  def inc?(vs : ResourceBag) : Bool
+    false unless has(vs)
+    vs.each do |t, c|
+      @values[t] = @values[t] + c
+    end
+    true
   end
 
   def dec(t : Type, value : Capacity)

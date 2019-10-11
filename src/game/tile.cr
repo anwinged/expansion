@@ -7,6 +7,7 @@ module Game
     Plateau
     Terraformer
     Warehouse
+    Building
   end
 
   abstract class Tile
@@ -20,8 +21,11 @@ module Game
     getter cap
     getter cur
 
-    abstract def letter : Char
     abstract def has_role(role : TileRole) : Bool
+
+    def letter : Char
+      ' '
+    end
 
     def withdraw(value)
       if value >= @cur
@@ -117,5 +121,16 @@ module Game
     def has_role(role : TileRole) : Bool
       role == TileRole::Terraformer
     end
+  end
+
+  class BuildingTile < Tile
+    def initialize(@point : Point, @building : Building)
+    end
+
+    def has_role(role : TileRole) : Bool
+      role == TileRole::Building
+    end
+
+    getter building
   end
 end

@@ -1,9 +1,9 @@
 require "./resources"
 
 class Game::World
-  property ts : Int64
+  property ts : TimePoint
 
-  def initialize(@map : Map, @ts = 0_i64)
+  def initialize(@map : Map, @ts : TimePoint = 0_i64)
     @start_ts = @ts
     @resources = Resources.new
     @queue = Queue.new
@@ -23,7 +23,7 @@ class Game::World
     @queue.push(done_at, command)
   end
 
-  def run(ts : Int64)
+  def run(ts : TimePoint)
     loop do
       item = @queue.pop(ts)
       if item.nil?

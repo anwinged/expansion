@@ -2,9 +2,27 @@ require "./tile"
 
 module Game
   abstract class Command
-    abstract def start(world : World) : Int32
+    abstract def start(world : World) : TimeSpan
     abstract def finish(world : World)
     abstract def desc : String
+  end
+
+  class BuildCommand < Command
+    def initialize(@point : Point, @building : Building)
+    end
+
+    def desc : String
+      sprintf "Building '%s'", building.name
+    end
+
+    def start(world : World) : TimeSpan
+      world.map.set(ConstructionSiteTile.new(@point))
+      @building.construction.ts
+    end
+
+    def finish(world : World)
+      world.map.set(BuildingTile.new(@point, @building))
+    end
   end
 
   class BuildCrystalHarvesterCommand < Command
@@ -13,7 +31,7 @@ module Game
     def initialize(@point : Point)
     end
 
-    def start(world : World) : Int32
+    def start(world : World) : TimeSpan
       tile = world.map.get(@point)
       if !tile.can_build?
         raise InvalidPlaceForBuilding.new
@@ -41,7 +59,7 @@ module Game
       @value = 0
     end
 
-    def start(world : World) : Int32
+    def start(world : World) : TimeSpan
       deposit_tile = nearest_deposit(world)
       stock_tile = nearest_stock(world)
       if deposit_tile && stock_tile
@@ -83,7 +101,7 @@ module Game
     def initialize(@point : Point)
     end
 
-    def start(world : World) : Int32
+    def start(world : World) : TimeSpan
       tile = world.map.get(@point)
       if !tile.can_build?
         raise InvalidPlaceForBuilding.new
@@ -113,7 +131,7 @@ module Game
     def initialize(@point : Point)
     end
 
-    def start(world : World) : Int32
+    def start(world : World) : TimeSpan
       @target_tile = nearest_deposit(world)
       if @target_tile
         dist = @point.distance(@target_tile.as(Tile).point)
@@ -148,7 +166,7 @@ module Game
     def initialize(@point : Point)
     end
 
-    def start(world : World) : Int32
+    def start(world : World) : TimeSpan
       tile = world.map.get(@point)
       if !tile.can_build?
         raise InvalidPlaceForBuilding.new
@@ -178,7 +196,7 @@ module Game
       @can_terr = false
     end
 
-    def start(world : World) : Int32
+    def start(world : World) : TimeSpan
       if world.resources.has(Resources::Type::Crystals, CRYSTAL_REQUIRED)
         world.resources.dec(Resources::Type::Crystals, CRYSTAL_REQUIRED)
         @can_terr = true

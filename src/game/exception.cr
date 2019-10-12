@@ -7,4 +7,7 @@ module Game
 
   class InvalidPlaceForBuilding < BaseException
   end
+
+  class ResourceMismatch < BaseException
+  end
 end

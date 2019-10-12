@@ -1,15 +1,4 @@
 module Game
-  enum TileRole
-    ConstructionSite
-    CrystalDeposits
-    CrystalHarvester
-    CrystalRestorer
-    Plateau
-    Terraformer
-    Warehouse
-    Building
-  end
-
   abstract class Tile
     property cap : Int32 = 0
     property cur : Int32 = 0
@@ -132,5 +121,17 @@ module Game
     end
 
     getter building
+  end
+
+  class DepositTile < Tile
+    def initialize(@point : Point, @res : Resources::Type, @cap : Capacity)
+    end
+
+    def has_role(role : TileRole) : Bool
+      role == TileRole::Deposit
+    end
+
+    getter res
+    getter cap
   end
 end

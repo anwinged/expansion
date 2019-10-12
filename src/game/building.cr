@@ -8,12 +8,13 @@ module Game
     getter output
   end
 
-  class Restoration
-    def initialize(@ts : TimeSpan, @type : Resources::Type, @cap : Capacity)
+  class Mining
+    def initialize(@ts : TimeSpan, @input : Resources, @res : Resources::Type, @cap : Capacity)
     end
 
     getter ts
-    getter type
+    getter input
+    getter res
     getter cap
   end
 
@@ -44,6 +45,7 @@ module Game
       Storehouse
       CrystalMiner
       CrystalRestorer
+      Terraformer
     end
 
     def initialize(
@@ -53,12 +55,14 @@ module Game
       roles : Array(Role) | Nil = nil,
       construction : Construction | Nil = nil,
       production : Production | Nil = nil,
-      restoration : Restoration | Nil = nil,
+      mining : Mining | Nil = nil,
+      restoration : Mining | Nil = nil,
       storage : Capacity | Nil = nil
     )
       @roles = roles.nil? ? Array(Role).new : roles
       @construction = construction.nil? ? Construction.immediatly : construction.as(Construction)
       @production = production
+      @mining = mining
       @restoration = restoration
       @storage = storage.nil? ? 0 : storage
     end
@@ -68,6 +72,7 @@ module Game
     getter roles
     getter construction
     getter production
+    getter mining
     getter restoration
     getter storage
   end

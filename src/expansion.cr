@@ -5,29 +5,21 @@ require "./cli/**"
 map = Game::Generator.make 5, 5
 ts = Time.local.to_unix
 world = Game::World.new map, ts
-
+buildings = Game::BuildingFactory.new
 router = CLI::CommandRouter.new
 
-router.add "harv {x} {y}", "Build harvester at x,y (+80cr/10s)" do |p|
-  x = p["x"].to_i32
-  y = p["y"].to_i32
-  point = Game::Point.new(x, y)
-  world.push(Game::BuildCrystalHarvesterCommand.new(point))
-  printf "Build harvester at %d %d\n", x, y
-end
-
-router.add "rest {x} {y}", "Build restorer at x,y (100 cr, +30cr/15s)" do |p|
-  x = p["x"].to_i32
-  y = p["y"].to_i32
-  point = Game::Point.new(x, y)
-  world.push(Game::BuildCrystalRestorerCommand.new(point))
-end
-
-router.add "terr {x} {y}", "Build terraformator at x,y (300 cr, +5terr/-50cr/60s)" do |p|
-  x = p["x"].to_i32
-  y = p["y"].to_i32
-  point = Game::Point.new(x, y)
-  world.push(Game::BuildTerraformerCommand.new(point))
+buildings.items.each do |i|
+  t = i[:t]
+  b = i[:b]
+  route = sprintf "%s {x} {y}", b.name.downcase
+  desc = sprintf "Build %s at x,y", b.name
+  router.add route, desc do |p|
+    x = p["x"].to_i32
+    y = p["y"].to_i32
+    point = Game::Point.new(x, y)
+    world.push(Game::BuildCommand.new(point, b))
+    printf "Build %s at %d %d\n", b.name, x, y
+  end
 end
 
 router.add "help", "Show all commands" do |p|

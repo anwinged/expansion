@@ -1,6 +1,6 @@
 class Game::Queue
   struct Item
-    def initialize(@ts : Int64, @command : Command)
+    def initialize(@ts : TimePoint, @command : Command)
     end
 
     getter ts
@@ -11,7 +11,7 @@ class Game::Queue
     @data = [] of Item
   end
 
-  def push(ts : Int64, value : Command)
+  def push(ts : TimePoint, value : Command)
     # very unoptimal algo
     @data.push(Item.new(ts, value))
     @data.sort! do |a, b|
@@ -19,7 +19,7 @@ class Game::Queue
     end
   end
 
-  def pop(ts : Int64) : Item | Nil
+  def pop(ts : TimePoint) : Item | Nil
     if @data.size == 0
       return nil
     end

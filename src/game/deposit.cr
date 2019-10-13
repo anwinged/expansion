@@ -12,14 +12,28 @@ class Game::Deposit
   getter cap
   getter cur
 
-  def inc(resource : Resource)
+  def inc(resource : Resource) : Resource
     check_res resource.type
-    @cur = Math.min(@cap, @cur + resource.amount)
+    if @cur + resource.amount <= @cap
+      @cur += resource.amount
+      Resource.new(resource.type, resource.amount)
+    else
+      res = Resource.new(resource.type, @cap - @cur)
+      @cur = @cap
+      res
+    end
   end
 
-  def dec(resource : Resource)
+  def dec(resource : Resource) : Resource
     check_res resource.type
-    @cur = Math.max(0, @cur - resource.amount)
+    if @cur >= resource.amount
+      @cur -= resource.amount
+      resource
+    else
+      res = Resource.new(resource.type, @cur)
+      @cur = 0
+      res
+    end
   end
 
   private def check_res(other_res_type : Resource::Type)

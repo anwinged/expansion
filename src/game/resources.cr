@@ -11,6 +11,10 @@ struct Game::Resource
 
   getter type
   getter amount
+
+  def with_amount(amount : Capacity) : self
+    self.new @type, amount
+  end
 end
 
 class Game::ResourceBag

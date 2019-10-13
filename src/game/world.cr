@@ -15,10 +15,11 @@ class Game::World
   getter queue
   getter score
 
-  def push(command : Command)
+  def push(command : Command) : TimePoint
     dur = command.start(self)
     done_at = @ts + dur.to_i64
     @queue.push(done_at, command)
+    done_at
   end
 
   def run(ts : TimePoint)

@@ -4,6 +4,10 @@ struct Game::Resource
   enum Type
     Crystals
     Terraformation
+
+    def to_res(amount : Capacity)
+      Resource.new self, amount
+    end
   end
 
   def initialize(@type : Type, @amount : Capacity)

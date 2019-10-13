@@ -24,5 +24,5 @@ run: format
 
 .PHONY: spec
 spec: format
-	./crystal spec --no-debug --warnings all --error-on-warnings --error-trace
+	./crystal spec --warnings all --error-on-warnings --error-trace
 

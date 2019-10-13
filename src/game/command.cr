@@ -30,6 +30,9 @@ module Game
       if @building.mining
         world.push(MineCommand.new(@point))
       end
+      if @building.restoration
+        world.push(RestoreCommand.new(@point))
+      end
     end
   end
 
@@ -51,10 +54,14 @@ module Game
       tile = world.map.get(@point).as(BuildingTile)
       building = tile.building
       mining = building.mining.as(Mining)
+      if !world.resources.has(mining.input)
+        return mining.ts
+      end
       resource = mining.resource
       deposit_tile = nearest_deposit(world, resource.type)
       if deposit_tile
-        @holded = Resource.new resource.type, deposit_tile.dep.dec(resource.amount)
+        mined_amount = deposit_tile.dep.dec(resource.amount)
+        @holded = resource.type.to_res mined_amount
       end
       mining.ts
     end

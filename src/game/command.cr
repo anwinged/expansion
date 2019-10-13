@@ -34,9 +34,17 @@ module Game
   end
 
   class MineCommand < Command
-    @holded : Resource | Nil = nil
+    @holded : Resource? = nil
 
     def initialize(@point : Point)
+    end
+
+    def desc : String
+      if @holded
+        sprintf "Mine %s from %d,%d", @holded.type, @point.x, @point.y
+      else
+        sprintf "Wait for resources at %d,%d", @point.x, @point.y
+      end
     end
 
     def start(world : World) : TimeSpan
@@ -45,7 +53,7 @@ module Game
       mining = building.mining.as(Mining)
       deposit_tile = nearest_deposit(world, mining.resource.type)
       if deposit_tile
-        @holded = deposit_tile.as(DepositTile).dep.dec(mining.resource)
+        @holded = deposit_tile.dep.dec(mining.resource)
       end
       mining.ts
     end
@@ -53,23 +61,16 @@ module Game
     def finish(world : World)
       if @holded
         holded = @holded.as(Resource)
-        world.resources.inc(holded.type, holded.amount)
+        world.resources.inc(holded)
       end
       world.push(MineCommand.new(@point))
     end
 
-    def desc : String
-      if @holded
-        sprintf "Mine %s from %d,%d", @holded.as(Resource).type, @point.x, @point.y
-      else
-        sprintf "Wait for resources at %d,%d", @point.x, @point.y
-      end
-    end
-
-    private def nearest_deposit(world : World, res_type : Resource::Type)
-      world.map.nearest_tile @point do |tile|
+    private def nearest_deposit(world : World, res_type : Resource::Type) : DepositTile?
+      tile = world.map.nearest_tile @point do |tile|
         tile.is_a?(DepositTile) && tile.dep.type == res_type && tile.dep.cur > 0
       end
+      tile.as?(DepositTile)
     end
   end
 

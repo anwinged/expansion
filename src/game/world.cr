@@ -1,5 +1,3 @@
-require "./resources"
-
 class Game::World
   property ts : TimePoint
 

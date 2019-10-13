@@ -1,4 +1,4 @@
-require "./exception"
+require "./types"
 
 struct Game::Resource
   enum Type
@@ -33,12 +33,16 @@ class Game::ResourceBag
     end
   end
 
-  def [](t : Resource::Type)
-    @values.fetch(t, 0)
+  def [](res_type : Resource::Type)
+    @values.fetch(res_type, 0)
   end
 
-  def has(t : Resource::Type, value : Capacity) : Bool
-    @values[t] >= value
+  def has(res_type : Resource::Type, value : Capacity) : Bool
+    @values[res_type] >= value
+  end
+
+  def has(res : Resource) : Bool
+    has(res.type, res.amount)
   end
 
   def has(vs : ResourceHash) : Bool
@@ -53,24 +57,20 @@ class Game::ResourceBag
     has vs.to_hash
   end
 
-  def inc(t : Resource::Type, value : Capacity)
-    new_value = @values.fetch(t, 0) + value
+  def inc(res_type : Resource::Type, value : Capacity)
+    new_value = @values[res_type] + value
     if new_value < 0
       raise NotEnoughtResources.new
     end
-    @values[t] = new_value
+    @values[res_type] = new_value
   end
 
-  def inc?(vs : ResourceBag) : Bool
-    false unless has(vs)
-    vs.each do |t, c|
-      @values[t] = @values[t] + c
-    end
-    true
+  def inc(res : Resource)
+    inc(res.type, res.amount)
   end
 
-  def dec(t : Resource::Type, value : Capacity)
-    inc(t, -value)
+  def dec(res_type : Resource::Type, value : Capacity)
+    inc(res_type, -value)
   end
 
   def to_hash : ResourceHash

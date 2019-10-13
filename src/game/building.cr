@@ -50,8 +50,8 @@ module Game
 
     def initialize(
       @type : Type,
-      @name : String,
       *,
+      name : String = "",
       roles : Array(Role) | Nil = nil,
       construction : Construction | Nil = nil,
       production : Production | Nil = nil,
@@ -59,6 +59,7 @@ module Game
       restoration : Mining | Nil = nil,
       storage : Capacity | Nil = nil
     )
+      @name = name != "" ? name : @type.to_s
       @roles = roles.nil? ? Array(Role).new : roles
       @construction = construction.nil? ? Construction.immediatly : construction.as(Construction)
       @production = production

@@ -1,10 +1,10 @@
 require "./spec_helper"
 
-module Test::GameResources
-  alias Res = Game::Resources
-  alias ResType = Game::Resources::Type
+module Game::TestResourceBag
+  alias Res = ResourceBag
+  alias ResType = Resource::Type
 
-  describe Game::Resources do
+  describe ResourceBag do
     it "should be created from hash" do
       res = Res.new({ResType::Crystals => 100})
       res[ResType::Crystals].should eq 100

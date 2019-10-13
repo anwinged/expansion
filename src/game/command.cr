@@ -27,47 +27,46 @@ module Game
 
     def finish(world : World)
       world.map.set(BuildingTile.new(@point, @building))
-      # world.push(MineCommand.new(@point))
+      if @building.mining
+        world.push(MineCommand.new(@point))
+      end
     end
   end
 
-  # class MineCommand < Command
-  #   @output : Resources | Nil
+  class MineCommand < Command
+    @holded : Resource | Nil = nil
 
-  #   def initialize(@point : Point)
-  #   end
+    def initialize(@point : Point)
+    end
 
-  #   def start(world : World) : TimeSpan
-  #     tile = world.map.get(@point).as(BuildingTile)
-  #     building = tile.building
-  #     production = building.production
-  #     if !world.resources.has(production.input)
-  #       return production.ts
-  #     end
-  #     target_resource = production.type
-  #     world.resources.dec(production.input)
-  #     @output = production.output
-  #     production.ts
-  #   end
+    def start(world : World) : TimeSpan
+      tile = world.map.get(@point).as(BuildingTile)
+      building = tile.building
+      mining = building.mining.as(Mining)
+      # deposit_tile = nearest_deposit(world, mining.resource.type)
+      # if deposit_tile
+      #   @holded = deposit_tile.dep.dec(mining.resource)
+      # end
+      mining.ts
+    end
 
-  #   def finish(world : World)
-  #     if @output.nil?
-  #       return
-  #     end
-  #     world.resources.inc(output)
-  #     world.push(MineCommand.new(@point))
-  #   end
+    def finish(world : World)
+      if @holded
+        # world.resources.inc(@holded)
+      end
+      world.push(MineCommand.new(@point))
+    end
 
-  #   def desc : String
-  #     sprintf "Build harvester site at %d,%d", @point.x, @point.y
-  #   end
+    def desc : String
+      sprintf "Mine `smth` from %d,%d", @point.x, @point.y
+    end
 
-  #   # private def nearest_deposit(world : World, res : Resources::Type)
-  #   #   world.map.nearest_tile @point do |tile|
-  #   #     tile.has_role(TileRole::Deposit) && tile.cur > 0
-  #   #   end
-  #   # end
-  # end
+    # private def nearest_deposit(world : World, res_type : Resource::Type)
+    #   world.map.nearest_tile @point do |tile|
+    #     tile.is_a?(DepositTile) && tile.dep.type == res_type && tile.dep.cur > 0
+    #   end
+    # end
+  end
 
   # class BuildCrystalHarvesterCommand < Command
   #   BUILD_TIME = 30

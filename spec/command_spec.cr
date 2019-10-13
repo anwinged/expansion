@@ -22,8 +22,8 @@ describe Game::Command do
     building = Game::Building.new Game::Building::Type::StartPoint, **{
       construction: Game::Construction.new(
         ts: 10,
-        cost: Game::Resources.new({
-          Game::Resources::Type::Crystals => 100,
+        cost: Game::ResourceBag.new({
+          Game::Resource::Type::Crystals => 100,
         })
       ),
     }

@@ -1,40 +1,30 @@
-module Game
-  class Deposit
-    class Span
-      def initialize(@res : Resources::Type, @cap : Capacity)
-      end
+class Game::Deposit
+  @cur : Capacity = 0
 
-      getter res
-      getter cap
-    end
+  def initialize(@type : Resource::Type, @cap : Capacity)
+    @cur = @cap
+  end
 
-    @cur : Capacity = 0
+  def initialize(@type : Resource::Type, @cap : Capacity, @cur : Capacity)
+  end
 
-    def initialize(@res : Resources::Type, @cap : Capacity)
-      @cur = @cap
-    end
+  getter type
+  getter cap
+  getter cur
 
-    def initialize(@res : Resources::Type, @cap : Capacity, @cur : Capacity)
-    end
+  def inc(resource : Resource)
+    check_res resource.type
+    @cur = Math.min(@cap, @cur + resource.amount)
+  end
 
-    getter res
-    getter cap
-    getter cur
+  def dec(resource : Resource)
+    check_res resource.type
+    @cur = Math.max(0, @cur - resource.amount)
+  end
 
-    def inc(span : Span)
-      check_res span.res
-      @cur = Math.min(@cap, @cur + span.cap)
-    end
-
-    def dec(span : Span)
-      check_res span.res
-      @cur = Math.max(0, @cur - span.cap)
-    end
-
-    private def check_res(other_res : Resources::Type)
-      if @res != other_res
-        raise ResourceMismatch.new
-      end
+  private def check_res(other_res_type : Resource::Type)
+    if @type != other_res_type
+      raise ResourceMismatch.new
     end
   end
 end

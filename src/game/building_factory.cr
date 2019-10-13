@@ -11,7 +11,7 @@ module Game
         Building.new Building::Type::CrystalMiner, **{
           mining: Mining.new(
             ts: 20,
-            dep: Deposit::Span.new(Resources::Type::Crystals, 40)
+            resource: Resource.new(Resource::Type::Crystals, 40)
           ),
         }
       )
@@ -20,14 +20,14 @@ module Game
         Building.new Building::Type::CrystalRestorer, **{
           construction: Construction.new(
             ts: 30,
-            cost: Resources.new({
-              Resources::Type::Crystals => 100,
+            cost: ResourceBag.new({
+              Resource::Type::Crystals => 100,
             }),
             requirements: [] of Game::Building::Type
           ),
           restoration: Mining.new(
             ts: 30,
-            dep: Deposit::Span.new(Resources::Type::Crystals, 20)
+            resource: Resource.new(Resource::Type::Crystals, 20)
           ),
         }
       )
@@ -36,18 +36,18 @@ module Game
         Building.new Building::Type::Terraformer, **{
           construction: Construction.new(
             ts: 120,
-            cost: Resources.new({
-              Resources::Type::Crystals => 300,
+            cost: ResourceBag.new({
+              Resource::Type::Crystals => 300,
             }),
             requirements: [] of Game::Building::Type
           ),
           production: Production.new(
             ts: 60,
-            input: Resources.new({
-              Resources::Type::Crystals => 50,
+            input: ResourceBag.new({
+              Resource::Type::Crystals => 50,
             }),
-            output: Resources.new({
-              Resources::Type::Terraformation => 5,
+            output: ResourceBag.new({
+              Resource::Type::Terraformation => 5,
             })
           ),
         }

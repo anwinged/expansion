@@ -10,9 +10,9 @@ describe Game::Building do
     bg = Game::Building.new Game::Building::Type::CrystalMiner, **{
       production: Game::Production.new(
         ts: 20,
-        input: Game::Resources.new,
-        output: Game::Resources.new({
-          Game::Resources::Type::Crystals => 100,
+        input: Game::ResourceBag.new,
+        output: Game::ResourceBag.new({
+          Game::Resource::Type::Crystals => 100,
         })
       ),
     }

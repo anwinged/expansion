@@ -1,19 +1,27 @@
 require "./exception"
 
-class Game::Resources
+struct Game::Resource
   enum Type
     Crystals
     Terraformation
   end
 
-  alias ResourceBag = Hash(Type, Capacity)
+  def initialize(@type : Type, @amount : Capacity)
+  end
 
-  @values : ResourceBag
+  getter type
+  getter amount
+end
 
-  def initialize(vals : ResourceBag | Nil = nil)
-    @values = {} of Type => Capacity
-    Type.each { |t, v| @values[t] = 0 }
-    if vals.is_a?(ResourceBag)
+class Game::ResourceBag
+  alias ResourceHash = Hash(Resource::Type, Capacity)
+
+  @values : ResourceHash
+
+  def initialize(vals : ResourceHash | Nil = nil)
+    @values = ResourceHash.new
+    Resource::Type.each { |t, v| @values[t] = 0 }
+    if vals.is_a?(ResourceHash)
       vals.each do |i|
         t, v = i
         @values[t] = v
@@ -21,15 +29,15 @@ class Game::Resources
     end
   end
 
-  def [](t : Type)
+  def [](t : Resource::Type)
     @values.fetch(t, 0)
   end
 
-  def has(t : Type, value : Capacity) : Bool
+  def has(t : Resource::Type, value : Capacity) : Bool
     @values[t] >= value
   end
 
-  def has(vs : ResourceBag) : Bool
+  def has(vs : ResourceHash) : Bool
     vs.reduce true do |acc, entry|
       t = entry[0]
       v = entry[1]
@@ -41,7 +49,7 @@ class Game::Resources
     has vs.to_hash
   end
 
-  def inc(t : Type, value : Capacity)
+  def inc(t : Resource::Type, value : Capacity)
     new_value = @values.fetch(t, 0) + value
     if new_value < 0
       raise NotEnoughtResources.new
@@ -57,11 +65,11 @@ class Game::Resources
     true
   end
 
-  def dec(t : Type, value : Capacity)
+  def dec(t : Resource::Type, value : Capacity)
     inc(t, -value)
   end
 
-  def to_hash : ResourceBag
+  def to_hash : ResourceHash
     @values.clone
   end
 end

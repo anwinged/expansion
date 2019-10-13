@@ -5,7 +5,7 @@ class Game::World
 
   def initialize(@map : Map, @ts : TimePoint = 0_i64)
     @start_ts = @ts
-    @resources = Resources.new
+    @resources = ResourceBag.new
     @queue = Queue.new
     @finished = false
     @score = 0
@@ -41,6 +41,6 @@ class Game::World
   end
 
   def win?
-    @resources[Resources::Type::Terraformation] >= 100
+    @resources[Resource::Type::Terraformation] >= 100
   end
 end

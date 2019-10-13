@@ -10,7 +10,9 @@ module Game
     getter cap
     getter cur
 
-    abstract def has_role(role : TileRole) : Bool
+    def has_role(role : TileRole) : Bool
+      false
+    end
 
     def letter : Char
       ' '
@@ -124,14 +126,9 @@ module Game
   end
 
   class DepositTile < Tile
-    def initialize(@point : Point, @res : Resources::Type, @cap : Capacity)
+    def initialize(@point : Point, @dep : Deposit)
     end
 
-    def has_role(role : TileRole) : Bool
-      role == TileRole::Deposit
-    end
-
-    getter res
-    getter cap
+    getter dep
   end
 end

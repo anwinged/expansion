@@ -59,11 +59,14 @@ module Game
       end
       resource = mining.resource
       deposit_tile = nearest_deposit(world, resource.type)
-      if deposit_tile
+      stock_tile = nearest_stock(world)
+      if deposit_tile && stock_tile
         mined_amount = deposit_tile.dep.dec(resource.amount)
         @holded = resource.type.to_res mined_amount
+        mining.ts + 2 * tile.point.distance(stock_tile.point) + 2 * tile.point.distance(deposit_tile.point)
+      else
+        mining.ts
       end
-      mining.ts
     end
 
     def finish(world : World)
@@ -81,6 +84,13 @@ module Game
         tile.is_a?(DepositTile) && tile.dep.type == res_type && tile.dep.cur > 0
       end
       tile.as?(DepositTile)
+    end
+
+    private def nearest_stock(world : World) : BuildingTile?
+      tile = world.map.nearest_tile @point do |tile|
+        tile.is_a?(BuildingTile) && tile.building.has_role Building::Role::Storehouse
+      end
+      tile.as?(BuildingTile)
     end
   end
 

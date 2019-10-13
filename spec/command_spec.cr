@@ -13,7 +13,7 @@ module Game::TestCommand
       Point.new(0, 0),
       Building.new(
         Building::Type::StartPoint,
-        storage: 200
+        storage: 200, roles: [Building::Role::Storehouse]
       )
     )
     map.set DepositTile.new(
@@ -79,8 +79,10 @@ module Game::TestCommand
     it "should complete mining command" do
       world = World.new create_map_with_resource
       command = MineCommand.new Point.new(0, 1), once: true
-      world.push command
-      world.run 20
+      time_point = (20 + 1 * 2 + 1 * 2).to_i64
+      done_at = world.push command
+      done_at.should eq time_point
+      world.run time_point
       # Check world resources
       world.resources[Resource::Type::Crystals].should eq 40
       # Check tile deposit

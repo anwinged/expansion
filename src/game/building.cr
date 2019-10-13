@@ -63,7 +63,7 @@ module Game
       storage : Capacity | Nil = nil
     )
       @name = name != "" ? name : @type.to_s
-      @roles = roles.nil? ? Array(Role).new : roles
+      @roles = roles.nil? ? Array(Role).new : roles.as(Array(Role))
       @construction = construction.nil? ? Construction.immediatly : construction.as(Construction)
       @production = production
       @mining = mining
@@ -79,5 +79,9 @@ module Game
     getter mining
     getter restoration
     getter storage
+
+    def has_role(role : Role) : Bool
+      @roles.includes? role
+    end
   end
 end

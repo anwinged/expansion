@@ -36,7 +36,7 @@ module Game
   class MineCommand < Command
     @holded : Resource? = nil
 
-    def initialize(@point : Point)
+    def initialize(@point : Point, *, @once = false)
     end
 
     def desc : String
@@ -63,12 +63,61 @@ module Game
         holded = @holded.as(Resource)
         world.resources.inc(holded)
       end
-      world.push(MineCommand.new(@point))
+      if !@once
+        world.push(MineCommand.new(@point))
+      end
     end
 
     private def nearest_deposit(world : World, res_type : Resource::Type) : DepositTile?
       tile = world.map.nearest_tile @point do |tile|
         tile.is_a?(DepositTile) && tile.dep.type == res_type && tile.dep.cur > 0
+      end
+      tile.as?(DepositTile)
+    end
+  end
+
+  class RestoreCommand < Command
+    @holded : Resource? = nil
+    @deposit_tile : DepositTile? = nil
+
+    def initialize(@point : Point, *, @once = false)
+    end
+
+    def desc : String
+      if @holded
+        sprintf "Restore %s from %d,%d", @holded.type, @point.x, @point.y
+      else
+        sprintf "Wait for resources at %d,%d", @point.x, @point.y
+      end
+    end
+
+    def start(world : World) : TimeSpan
+      tile = world.map.get(@point).as(BuildingTile)
+      building = tile.building
+      restoration = building.restoration.as(Mining)
+      if !world.resources.has(restoration.input)
+        return restoration.ts
+      end
+      @deposit_tile = nearest_deposit(world, restoration.resource.type)
+      if @deposit_tile
+        world.resources.dec restoration.input
+        @holded = restoration.resource
+      end
+      restoration.ts
+    end
+
+    def finish(world : World)
+      if @deposit_tile && @holded
+        @deposit_tile.as(DepositTile).dep.inc(@holded.as(Resource))
+      end
+      if !@once
+        world.push(RestoreCommand.new(@point))
+      end
+    end
+
+    private def nearest_deposit(world : World, res_type : Resource::Type) : DepositTile?
+      tile = world.map.nearest_tile @point do |tile|
+        tile.is_a?(DepositTile) && tile.dep.type == res_type && tile.dep.cur == 0
       end
       tile.as?(DepositTile)
     end

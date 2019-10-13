@@ -11,7 +11,8 @@ module Game
         Building.new Building::Type::CrystalMiner, **{
           mining: Mining.new(
             ts: 20,
-            resource: Resource.new(Resource::Type::Crystals, 40)
+            resource: Resource.new(Resource::Type::Crystals, 40),
+            input: ResourceBag.new
           ),
         }
       )
@@ -27,7 +28,8 @@ module Game
           ),
           restoration: Mining.new(
             ts: 30,
-            resource: Resource.new(Resource::Type::Crystals, 20)
+            resource: Resource.new(Resource::Type::Crystals, 20),
+            input: ResourceBag.new
           ),
         }
       )

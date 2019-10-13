@@ -9,11 +9,12 @@ module Game
   end
 
   class Mining
-    def initialize(@ts : TimeSpan, @resource : Resource)
+    def initialize(@ts : TimeSpan, @resource : Resource, @input : ResourceBag)
     end
 
     getter ts
     getter resource
+    getter input
   end
 
   class Construction

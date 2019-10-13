@@ -1,4 +1,5 @@
 class Game::Deposit
+  @cap : Capacity = 0
   @cur : Capacity = 0
 
   def initialize(@type : Resource::Type, @cap : Capacity)

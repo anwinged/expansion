@@ -25,5 +25,29 @@ module Game::TestResourceBag
       res = Res.new
       res.has({ResType::Crystals => 50}).should be_false
     end
+
+    it "should inc single value" do
+      res = Res.new ({ResType::Crystals => 10})
+      res.inc ResType::Crystals, 5
+      res[ResType::Crystals].should eq 15
+    end
+
+    it "should inc resource" do
+      res = Res.new ({ResType::Crystals => 10})
+      res.inc Resource.new(ResType::Crystals, 5)
+      res[ResType::Crystals].should eq 15
+    end
+
+    it "should inc hash" do
+      res = Res.new ({ResType::Crystals => 10})
+      res.inc ({ResType::Crystals => 5})
+      res[ResType::Crystals].should eq 15
+    end
+
+    it "should inc other bag" do
+      res = Res.new ({ResType::Crystals => 10})
+      res.inc Res.new({ResType::Crystals => 5})
+      res[ResType::Crystals].should eq 15
+    end
   end
 end

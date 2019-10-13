@@ -9,7 +9,7 @@ module Game
   end
 
   class Mining
-    def initialize(@ts : TimeSpan, @dep : DepositSpan)
+    def initialize(@ts : TimeSpan, @dep : Deposit::Span)
     end
 
     getter ts

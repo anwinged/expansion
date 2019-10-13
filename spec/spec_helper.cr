@@ -1,6 +1,7 @@
 require "spec"
 require "../src/game/**"
 require "../src/cli/**"
+require "../src/app"
 
 def create_map_2x2 : Game::Map
   map = Game::Map.new 2, 2

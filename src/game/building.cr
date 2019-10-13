@@ -9,17 +9,19 @@ module Game
   end
 
   class Mining
-    def initialize(@ts : TimeSpan, @input : Resources, @res : Resources::Type, @cap : Capacity)
+    def initialize(@ts : TimeSpan, @dep : DepositSpan)
     end
 
     getter ts
-    getter input
-    getter res
-    getter cap
+    getter dep
   end
 
   class Construction
-    def initialize(@ts : TimeSpan, @cost : Resources, @requirements : Array(Building::Type))
+    def initialize(
+      @ts : TimeSpan,
+      @cost : Resources,
+      @requirements : Array(Building::Type) = [] of Building::Type
+    )
     end
 
     getter ts
@@ -27,11 +29,11 @@ module Game
     getter requirements
 
     def self.immediatly
-      Construction.new 0, Resources.new, [] of Building::Type
+      Construction.new 0, Resources.new
     end
 
     def self.free(ts : TimeSpan)
-      Construction.new ts, Resources.new, [] of Building::Type
+      Construction.new ts, Resources.new
     end
   end
 

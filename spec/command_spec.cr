@@ -16,7 +16,7 @@ describe Game::Command do
     tile.should be_a(Game::BuildingTile)
   end
 
-  it "should restrict build if not enought resources" do
+  it "should restrict building if not enought resources" do
     world = Game::World.new create_map_2x2
     point = Game::Point.new 1, 0
     building = Game::Building.new Game::Building::Type::StartPoint, **{
@@ -24,8 +24,7 @@ describe Game::Command do
         ts: 10,
         cost: Game::Resources.new({
           Game::Resources::Type::Crystals => 100,
-        }),
-        requirements: [] of Game::Building::Type
+        })
       ),
     }
     command = Game::BuildCommand.new point, building

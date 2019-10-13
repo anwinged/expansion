@@ -51,9 +51,10 @@ module Game
       tile = world.map.get(@point).as(BuildingTile)
       building = tile.building
       mining = building.mining.as(Mining)
-      deposit_tile = nearest_deposit(world, mining.resource.type)
+      resource = mining.resource
+      deposit_tile = nearest_deposit(world, resource.type)
       if deposit_tile
-        @holded = deposit_tile.dep.dec(mining.resource)
+        @holded = Resource.new resource.type, deposit_tile.dep.dec(resource.amount)
       end
       mining.ts
     end
@@ -98,17 +99,18 @@ module Game
       if !world.resources.has(restoration.input)
         return restoration.ts
       end
-      @deposit_tile = nearest_deposit(world, restoration.resource.type)
+      resource = restoration.resource
+      @deposit_tile = nearest_deposit(world, resource.type)
       if @deposit_tile
         world.resources.dec restoration.input
-        @holded = restoration.resource
+        @holded = resource
       end
       restoration.ts
     end
 
     def finish(world : World)
       if @deposit_tile && @holded
-        @deposit_tile.as(DepositTile).dep.inc(@holded.as(Resource))
+        @deposit_tile.as(DepositTile).dep.inc(@holded.as(Resource).amount)
       end
       if !@once
         world.push(RestoreCommand.new(@point))

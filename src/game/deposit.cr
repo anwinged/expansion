@@ -13,33 +13,25 @@ class Game::Deposit
   getter cap
   getter cur
 
-  def inc(resource : Resource) : Resource
-    check_res resource.type
-    if @cur + resource.amount <= @cap
-      @cur += resource.amount
-      Resource.new(resource.type, resource.amount)
+  def inc(value : Capacity) : Capacity
+    if @cur + value <= @cap
+      @cur += value
+      value
     else
-      res = Resource.new(resource.type, @cap - @cur)
+      res = @cap - @cur
       @cur = @cap
       res
     end
   end
 
-  def dec(resource : Resource) : Resource
-    check_res resource.type
-    if @cur >= resource.amount
-      @cur -= resource.amount
-      resource
+  def dec(value : Capacity) : Capacity
+    if @cur >= value
+      @cur -= value
+      value
     else
-      res = Resource.new(resource.type, @cur)
+      res = @cur
       @cur = 0
       res
-    end
-  end
-
-  private def check_res(other_res_type : Resource::Type)
-    if @type != other_res_type
-      raise ResourceMismatch.new
     end
   end
 end

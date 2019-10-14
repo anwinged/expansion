@@ -13,7 +13,6 @@ class App
     @router = CLI::CommandRouter.new
 
     @buildings.items.each do |i|
-      t = i[:t]
       b = i[:b]
       route = sprintf "%s {x} {y}", b.name.downcase
       desc = sprintf "Build %s at x,y", b.name
@@ -26,7 +25,7 @@ class App
       end
     end
 
-    @router.add "help", "Show all commands" do |p|
+    @router.add "help", "Show all commands" do
       printf "Commands:\n"
       @router.routes.each do |r|
         printf "  %s - %s\n", r.route, r.desc
@@ -47,7 +46,7 @@ class App
     (0...rows).each do |x|
       if x == 0
         printf "+"
-        (0...cols).each do |y|
+        (0...cols).each do
           printf "------+"
         end
         print "\n"
@@ -59,7 +58,7 @@ class App
       end
       print "\n"
       printf "|"
-      (0...cols).each do |y|
+      (0...cols).each do
         printf "      |"
       end
       print "\n"
@@ -74,7 +73,7 @@ class App
       end
       print "\n"
       printf "+"
-      (0...cols).each do |y|
+      (0...cols).each do
         printf "------+"
       end
       print "\n"

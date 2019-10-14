@@ -39,7 +39,7 @@ class CLI::CommandRouter
     m = command.match(pattern)
     return false if m.nil?
     groups = m.named_captures
-    nil_groups = groups.select { |k, v| v.nil? }
+    nil_groups = groups.select { |_, v| v.nil? }
     return false if nil_groups.size != 0
     params = groups.transform_values { |v| v.to_s }
     cb.call params

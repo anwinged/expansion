@@ -9,6 +9,6 @@ struct Game::Point
   getter y
 
   def distance(other) : Int32
-    return (other.x - @x).abs + (other.y - @y).abs
+    (other.x - @x).abs + (other.y - @y).abs
   end
 end

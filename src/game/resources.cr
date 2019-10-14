@@ -28,7 +28,7 @@ class Game::ResourceBag
 
   def initialize(vals : ResourceHash | Nil = nil)
     @values = ResourceHash.new
-    Resource::Type.each { |t, v| @values[t] = 0 }
+    Resource::Type.each { |t, _| @values[t] = 0 }
     if vals.is_a?(ResourceHash)
       add_amounts vals
     end

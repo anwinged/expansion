@@ -80,15 +80,15 @@ module Game
     end
 
     private def nearest_deposit(world : World, res_type : Resource::Type) : DepositTile?
-      tile = world.map.nearest_tile @point do |tile|
-        tile.is_a?(DepositTile) && tile.dep.type == res_type && tile.dep.cur > 0
+      tile = world.map.nearest_tile @point do |t|
+        t.is_a?(DepositTile) && t.dep.type == res_type && t.dep.cur > 0
       end
       tile.as?(DepositTile)
     end
 
     private def nearest_stock(world : World) : BuildingTile?
-      tile = world.map.nearest_tile @point do |tile|
-        tile.is_a?(BuildingTile) && tile.building.has_role Building::Role::Storehouse
+      tile = world.map.nearest_tile @point do |t|
+        t.is_a?(BuildingTile) && t.building.has_role Building::Role::Storehouse
       end
       tile.as?(BuildingTile)
     end
@@ -135,8 +135,8 @@ module Game
     end
 
     private def nearest_deposit(world : World, res_type : Resource::Type) : DepositTile?
-      tile = world.map.nearest_tile @point do |tile|
-        tile.is_a?(DepositTile) && tile.dep.type == res_type && tile.dep.cur == 0
+      tile = world.map.nearest_tile @point do |t|
+        t.is_a?(DepositTile) && t.dep.type == res_type && t.dep.cur == 0
       end
       tile.as?(DepositTile)
     end

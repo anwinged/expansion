@@ -1,3 +1,10 @@
 FROM alpine:edge as builder
 
-RUN apk add -u make crystal shards tzdata libc-dev yaml-dev
+# Install crystal and dev libs
+RUN apk add -u \
+	crystal \
+	shards \
+	make  \
+	tzdata \
+	libc-dev \
+	yaml-dev

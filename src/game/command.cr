@@ -39,11 +39,20 @@ module Game
     end
   end
 
-  class MineCommand < Command
-    @holded : Resource? = nil
-
+  abstract class ResourceCommand < Command
     def initialize(@point : Point, *, @once = false)
     end
+
+    protected def nearest_stock(world : World) : BuildingTile?
+      tile = world.map.nearest_tile @point do |t|
+        t.is_a?(BuildingTile) && t.building.has_role Building::Role::Storehouse
+      end
+      tile.as?(BuildingTile)
+    end
+  end
+
+  class MineCommand < ResourceCommand
+    @holded : Resource? = nil
 
     def desc : String
       if @holded
@@ -66,7 +75,9 @@ module Game
       if deposit_tile && stock_tile
         mined_amount = deposit_tile.dep.dec(resource.amount)
         @holded = resource.type.to_res mined_amount
-        mining.ts + 2 * tile.point.distance(stock_tile.point) + 2 * tile.point.distance(deposit_tile.point)
+        mining.ts +
+          2 * tile.point.distance(stock_tile.point) +
+          2 * tile.point.distance(deposit_tile.point)
       else
         mining.ts
       end
@@ -88,21 +99,11 @@ module Game
       end
       tile.as?(DepositTile)
     end
-
-    private def nearest_stock(world : World) : BuildingTile?
-      tile = world.map.nearest_tile @point do |t|
-        t.is_a?(BuildingTile) && t.building.has_role Building::Role::Storehouse
-      end
-      tile.as?(BuildingTile)
-    end
   end
 
-  class RestoreCommand < Command
+  class RestoreCommand < ResourceCommand
     @holded : Resource? = nil
     @deposit_tile : DepositTile? = nil
-
-    def initialize(@point : Point, *, @once = false)
-    end
 
     def desc : String
       if @holded
@@ -148,20 +149,10 @@ module Game
       end
       tile.as?(DepositTile)
     end
-
-    private def nearest_stock(world : World) : BuildingTile?
-      tile = world.map.nearest_tile @point do |t|
-        t.is_a?(BuildingTile) && t.building.has_role Building::Role::Storehouse
-      end
-      tile.as?(BuildingTile)
-    end
   end
 
-  class ProduceCommand < Command
+  class ProduceCommand < ResourceCommand
     @holded : ResourceBag? = nil
-
-    def initialize(@point : Point, *, @once = false)
-    end
 
     def desc : String
       if @holded
@@ -195,13 +186,6 @@ module Game
       if !@once
         world.push(ProduceCommand.new(@point))
       end
-    end
-
-    private def nearest_stock(world : World) : BuildingTile?
-      tile = world.map.nearest_tile @point do |t|
-        t.is_a?(BuildingTile) && t.building.has_role Building::Role::Storehouse
-      end
-      tile.as?(BuildingTile)
     end
   end
 end

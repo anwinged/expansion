@@ -33,6 +33,9 @@ module Game
       if @building.restoration
         world.push(RestoreCommand.new(@point))
       end
+      if @building.production
+        world.push(ProduceCommand.new(@point))
+      end
     end
   end
 

@@ -37,6 +37,11 @@ module Game::TestCommand
           ts: 20,
           resource: Resource.new(Resource::Type::Crystals, 40),
           input: ResourceBag.new({Resource::Type::Crystals => 5})
+        ),
+        production: Production.new(
+          ts: 20,
+          input: ResourceBag.new({Resource::Type::Crystals => 40}),
+          output: ResourceBag.new({Resource::Type::Terraformation => 20})
         )
       )
     )
@@ -103,6 +108,19 @@ module Game::TestCommand
       # Check tile deposit
       tile = world.map.get(1, 0).as(DepositTile)
       tile.dep.cur.should eq 40
+    end
+
+    it "should complete produce command" do
+      world = World.new create_map_with_resource
+      world.resources.inc(Resource::Type::Crystals, 100)
+      command = ProduceCommand.new Point.new(0, 1), once: true
+      time_point = (20 + 1 * 2 + 1 * 2).to_i64
+      done_at = world.push command
+      done_at.should eq time_point
+      world.run time_point
+      # Check world resources
+      world.resources[Resource::Type::Crystals].should eq 60
+      world.resources[Resource::Type::Terraformation].should eq 20
     end
   end
 end

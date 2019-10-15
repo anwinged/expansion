@@ -154,6 +154,54 @@ module Game
     end
   end
 
+  class ProduceCommand < Command
+    @holded : ResourceBag? = nil
+
+    def initialize(@point : Point, *, @once = false)
+    end
+
+    def desc : String
+      if @holded
+        sprintf "Produce at %d,%d", @point.x, @point.y
+      else
+        sprintf "Wait for resources at %d,%d", @point.x, @point.y
+      end
+    end
+
+    def start(world : World) : TimeSpan
+      tile = world.map.get(@point).as(BuildingTile)
+      building = tile.building
+      production = building.production.as(Production)
+      if !world.resources.has(production.input)
+        return production.ts
+      end
+      stock_tile = nearest_stock(world)
+      if stock_tile
+        world.resources.dec production.input
+        @holded = production.output
+        production.ts + 4 * tile.point.distance(stock_tile.point)
+      else
+        production.ts
+      end
+    end
+
+    def finish(world : World)
+      if @holded
+        world.resources.inc @holded.as(ResourceBag)
+      end
+      if !@once
+        world.push(ProduceCommand.new(@point))
+      end
+    end
+
+    private def nearest_stock(world : World) : BuildingTile?
+      tile = world.map.nearest_tile @point do |t|
+        t.is_a?(BuildingTile) && t.building.has_role Building::Role::Storehouse
+      end
+      tile.as?(BuildingTile)
+    end
+  end
+
   # class BuildCrystalHarvesterCommand < Command
   #   BUILD_TIME = 30
 

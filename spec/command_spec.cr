@@ -13,7 +13,8 @@ module Game::TestCommand
       Point.new(0, 0),
       Building.new(
         Building::Type::StartPoint,
-        storage: 200, roles: [Building::Role::Storehouse]
+        storage: 200,
+        roles: [Building::Role::Storehouse]
       )
     )
     map.set DepositTile.new(

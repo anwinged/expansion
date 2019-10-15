@@ -4,11 +4,21 @@ module Game
       @items = [] of NamedTuple(t: Building::Type, b: Building)
 
       add(
-        Building.new Building::Type::StartPoint, storage: 100
+        Building.new Building::Type::StartPoint, **{
+          shortcut: "sp",
+          storage:  100,
+          roles:    [Building::Role::Storehouse],
+        }
       )
 
       add(
         Building.new Building::Type::CrystalMiner, **{
+          shortcut:     "miner",
+          construction: Construction.new(
+            ts: 10,
+            cost: ResourceBag.new,
+            requirements: [] of Game::Building::Type
+          ),
           mining: Mining.new(
             ts: 20,
             resource: Resource.new(Resource::Type::Crystals, 40),
@@ -19,6 +29,7 @@ module Game
 
       add(
         Building.new Building::Type::CrystalRestorer, **{
+          shortcut:     "rest",
           construction: Construction.new(
             ts: 30,
             cost: ResourceBag.new({
@@ -36,6 +47,7 @@ module Game
 
       add(
         Building.new Building::Type::Terraformer, **{
+          shortcut:     "terr",
           construction: Construction.new(
             ts: 120,
             cost: ResourceBag.new({

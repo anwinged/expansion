@@ -3,7 +3,7 @@ require "./spec_helper"
 module Game::TestBuilding
   describe Building do
     it "should create storehouse" do
-      bg = Building.new Building::Type::Storehouse, storage: 100
+      bg = Building.new Building::Type::StartPoint, storage: 100
       bg.storage.should eq 100
     end
 

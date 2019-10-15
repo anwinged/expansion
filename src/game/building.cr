@@ -45,7 +45,6 @@ module Game
 
     enum Type
       StartPoint
-      Storehouse
       CrystalMiner
       CrystalRestorer
       Terraformer
@@ -60,7 +59,8 @@ module Game
       production : Production | Nil = nil,
       mining : Mining | Nil = nil,
       restoration : Mining | Nil = nil,
-      storage : Capacity | Nil = nil
+      storage : Capacity | Nil = nil,
+      shortcut : String = ""
     )
       @name = name != "" ? name : @type.to_s
       @roles = roles.nil? ? Array(Role).new : roles.as(Array(Role))
@@ -69,6 +69,7 @@ module Game
       @mining = mining
       @restoration = restoration
       @storage = storage.nil? ? 0 : storage
+      @shortcut = shortcut
     end
 
     getter type
@@ -79,6 +80,7 @@ module Game
     getter mining
     getter restoration
     getter storage
+    getter shortcut
 
     def has_role(role : Role) : Bool
       @roles.includes? role

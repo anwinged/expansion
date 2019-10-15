@@ -56,7 +56,7 @@ module Game
 
     def desc : String
       if @holded
-        sprintf "Mine %s from %d,%d", @holded.type, @point.x, @point.y
+        sprintf "Mine %s from %d,%d", @holded.as(Resource).type, @point.x, @point.y
       else
         sprintf "Wait for resources at %d,%d", @point.x, @point.y
       end
@@ -107,7 +107,7 @@ module Game
 
     def desc : String
       if @holded
-        sprintf "Restore %s from %d,%d", @holded.type, @point.x, @point.y
+        sprintf "Restore %s from %d,%d", @holded.as(Resource).type, @point.x, @point.y
       else
         sprintf "Wait for resources at %d,%d", @point.x, @point.y
       end

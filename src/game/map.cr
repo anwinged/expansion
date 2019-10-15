@@ -66,11 +66,11 @@ module Game
       rnd = Random.new
       map = Map.new(rows, cols)
       5.times do
-        pnt = Point.new(rnd.rand(0...rows), rnd.rand(0...cols))
+        point = Point.new(rnd.rand(0...rows), rnd.rand(0...cols))
         cap = rnd.rand(2...6)
-        map.set(CrystalTile.new(pnt, cap * 50))
+        deposit = Deposit.new(Resource::Type::Crystals, cap * 50)
+        map.set DepositTile.new(point, deposit)
       end
-      map.set(MainBaseTile.new(Point.new(0, 0)))
       map
     end
   end

@@ -14,7 +14,7 @@ class App
 
     @buildings.items.each do |i|
       b = i[:b]
-      route = sprintf "%s {x} {y}", b.name.downcase
+      route = sprintf "%s {x} {y}", b.shortcut
       desc = sprintf "Build %s at x,y", b.name
       @router.add route, desc do |p|
         x = p["x"].to_i32
@@ -54,7 +54,7 @@ class App
       printf "|"
       (0...cols).each do |y|
         tile = world.map.get(x, y)
-        printf "%s   %d%d|", tile.letter.colorize(:green), x, y
+        printf "%s   %d%d\|", render_tile_letter(tile), x, y
       end
       print "\n"
       printf "|"
@@ -65,11 +65,7 @@ class App
       printf "|"
       (0...cols).each do |y|
         tile = world.map.get(x, y)
-        if tile.letter == 'v'
-          printf "%6d|", world.map.get(x, y).cur
-        else
-          printf "      |", world.map.get(x, y).cur
-        end
+        printf "%6s|", render_tile_number(tile).to_s
       end
       print "\n"
       printf "+"
@@ -77,6 +73,43 @@ class App
         printf "------+"
       end
       print "\n"
+    end
+  end
+
+  def render_tile_letter(tile : Game::Tile)
+    case tile
+    when Game::ConstructionSiteTile then '_'.colorize(:red)
+    when Game::DepositTile          then render_deposit_resource tile.dep.type
+    when Game::BuildingTile         then render_building_letter tile.building.type
+    else
+      ' '
+    end
+  end
+
+  def render_building_letter(building_type : Game::Building::Type)
+    case building_type
+    when Game::Building::Type::StartPoint      then 'S'.colorize(:yellow)
+    when Game::Building::Type::CrystalMiner    then 'M'.colorize(:yellow)
+    when Game::Building::Type::CrystalRestorer then 'R'.colorize(:yellow)
+    when Game::Building::Type::Terraformer     then 'T'.colorize(:yellow)
+    else
+      ' '
+    end
+  end
+
+  def render_deposit_resource(res_type : Game::Resource::Type)
+    case res_type
+    when Game::Resource::Type::Crystals then 'v'.colorize(:blue)
+    else
+      ' '
+    end
+  end
+
+  def render_tile_number(tile : Game::Tile)
+    case tile
+    when Game::DepositTile then tile.dep.cur
+    else
+      ' '
     end
   end
 
@@ -99,8 +132,8 @@ class App
 
   def render_resources(world)
     printf "Resources:\n  Crystals:       %5d\n  Terraformation: %5d\n",
-      world.resources[Game::Resources::Type::Crystals],
-      world.resources[Game::Resources::Type::Terraformation]
+      world.resources[Game::Resource::Type::Crystals],
+      world.resources[Game::Resource::Type::Terraformation]
   end
 
   def render_world(world)

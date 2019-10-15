@@ -20,6 +20,10 @@ module Game
       if !world.resources.has(construction.cost)
         raise NotEnoughtResources.new
       end
+      tile = world.map.get @point
+      if !tile.as?(PlateauTile)
+        raise InvalidPlaceForBuilding.new
+      end
       # @todo check requirements
       world.map.set(ConstructionSiteTile.new(@point))
       construction.ts

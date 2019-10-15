@@ -118,11 +118,16 @@ module Game
       end
       resource = restoration.resource
       @deposit_tile = nearest_deposit(world, resource.type)
-      if @deposit_tile
+      stock_tile = nearest_stock(world)
+      if @deposit_tile && stock_tile
         world.resources.dec restoration.input
         @holded = resource
+        restoration.ts +
+          2 * tile.point.distance(stock_tile.point) +
+          2 * tile.point.distance(@deposit_tile.as(DepositTile).point)
+      else
+        restoration.ts
       end
-      restoration.ts
     end
 
     def finish(world : World)
@@ -139,6 +144,13 @@ module Game
         t.is_a?(DepositTile) && t.dep.type == res_type && t.dep.cur == 0
       end
       tile.as?(DepositTile)
+    end
+
+    private def nearest_stock(world : World) : BuildingTile?
+      tile = world.map.nearest_tile @point do |t|
+        t.is_a?(BuildingTile) && t.building.has_role Building::Role::Storehouse
+      end
+      tile.as?(BuildingTile)
     end
   end
 

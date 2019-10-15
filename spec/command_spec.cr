@@ -94,8 +94,10 @@ module Game::TestCommand
       world = World.new create_map_with_resource
       world.resources.inc(Resource::Type::Crystals, 20)
       command = RestoreCommand.new Point.new(0, 1), once: true
-      world.push command
-      world.run 20
+      time_point = (20 + 2 * 2 + 1 * 2).to_i64
+      done_at = world.push command
+      done_at.should eq time_point
+      world.run time_point
       # Check world resources
       world.resources[Resource::Type::Crystals].should eq 15
       # Check tile deposit

@@ -15,7 +15,7 @@ module Game
         Building.new Building::Type::CrystalMiner, **{
           shortcut:     "miner",
           construction: Construction.new(
-            ts: 10,
+            ts: 30,
             cost: ResourceBag.new,
             requirements: [] of Game::Building::Type
           ),
@@ -31,7 +31,7 @@ module Game
         Building.new Building::Type::CrystalRestorer, **{
           shortcut:     "rest",
           construction: Construction.new(
-            ts: 30,
+            ts: 45,
             cost: ResourceBag.new({
               Resource::Type::Crystals => 100,
             }),

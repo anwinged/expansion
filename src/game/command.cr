@@ -25,6 +25,7 @@ module Game
         raise InvalidPlaceForBuilding.new
       end
       # @todo check requirements
+      world.resources.dec construction.cost
       world.map.set(ConstructionSiteTile.new(@point))
       construction.ts
     end

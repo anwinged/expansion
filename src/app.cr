@@ -6,7 +6,7 @@ class App
   @ts : Game::TimePoint
 
   def initialize
-    @map = Game::Generator.make 6, 8, 10
+    @map = Game::MapGenerator.make 6, 8, 10
     @ts = Time.local.to_unix
     @world = Game::World.new @map, @ts
     @buildings = Game::BuildingFactory.new

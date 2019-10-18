@@ -23,10 +23,11 @@ format:
 run: format
 	crystal run $(ENTRY_POINT)
 
-.PHONY: spec
-spec: format
-	crystal spec --warnings all --error-on-warnings --error-trace
-
 .PHONY: ameba
 ameba:
 	ameba src/ || true
+
+.PHONY: spec
+spec: format ameba
+	crystal spec --warnings all --error-on-warnings --error-trace
+

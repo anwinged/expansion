@@ -81,8 +81,9 @@ class App
     when Game::ConstructionSiteTile then '_'.colorize(:red)
     when Game::DepositTile          then render_deposit_resource tile.dep.type
     when Game::BuildingTile         then render_building_letter tile.building.type
+    when Game::PlateauTile          then ' '
     else
-      ' '
+      raise "Unknown tile " + typeof(tile).to_s
     end
   end
 
@@ -92,10 +93,10 @@ class App
     when Game::Building::Type::CrystalMiner    then 'M'.colorize(:yellow)
     when Game::Building::Type::CrystalRestorer then 'R'.colorize(:green)
     when Game::Building::Type::OxygenCollector then 'O'.colorize(:yellow)
-    when Game::Building::Type::Smelter         then 'E'.colorize(:magenta)
+    when Game::Building::Type::Smelter         then 'I'.colorize(:magenta)
     when Game::Building::Type::Terraformer     then 'T'.colorize(:cyan)
     else
-      ' '
+      raise "Unknown building type " + building_type.to_s
     end
   end
 
@@ -103,7 +104,7 @@ class App
     case res_type
     when Game::Resource::Type::Crystals then 'v'.colorize(:blue)
     else
-      ' '
+      raise "Unknown resource type " + res_type.to_s
     end
   end
 

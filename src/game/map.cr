@@ -62,10 +62,10 @@ module Game
   end
 
   class Generator
-    def self.make(rows, cols) : Map
+    def self.make(rows, cols, deposits = 5) : Map
       rnd = Random.new
       map = Map.new(rows, cols)
-      5.times do
+      deposits.times do
         point = Point.new(rnd.rand(0...rows), rnd.rand(0...cols))
         cap = rnd.rand(2...6)
         deposit = Deposit.new(Resource::Type::Crystals, cap * 50)

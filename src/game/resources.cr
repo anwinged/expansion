@@ -4,6 +4,7 @@ struct Game::Resource
   enum Type
     Crystals
     Oxygen
+    Iron
     Terraformation
 
     def to_res(amount : Capacity)

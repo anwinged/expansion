@@ -49,6 +49,7 @@ module Game
       CrystalMiner
       CrystalRestorer
       OxygenCollector
+      Smelter
       Terraformer
     end
 

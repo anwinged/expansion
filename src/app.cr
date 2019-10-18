@@ -88,10 +88,12 @@ class App
 
   def render_building_letter(building_type : Game::Building::Type)
     case building_type
-    when Game::Building::Type::StartPoint      then 'S'.colorize(:yellow)
+    when Game::Building::Type::StartPoint      then 'S'.colorize(:yellow).underline
     when Game::Building::Type::CrystalMiner    then 'M'.colorize(:yellow)
-    when Game::Building::Type::CrystalRestorer then 'R'.colorize(:yellow)
-    when Game::Building::Type::Terraformer     then 'T'.colorize(:yellow)
+    when Game::Building::Type::CrystalRestorer then 'R'.colorize(:green)
+    when Game::Building::Type::OxygenCollector then 'O'.colorize(:yellow)
+    when Game::Building::Type::Smelter         then 'E'.colorize(:magenta)
+    when Game::Building::Type::Terraformer     then 'T'.colorize(:cyan)
     else
       ' '
     end
@@ -131,10 +133,10 @@ class App
   end
 
   def render_resources(world)
-    printf "Resources:\n  Crystals:       %5d\n  Oxygen:         %5d\n  Terraformation: %5d\n",
-      world.resources[Game::Resource::Type::Crystals],
-      world.resources[Game::Resource::Type::Oxygen],
-      world.resources[Game::Resource::Type::Terraformation]
+    printf "Resources:\n"
+    Game::Resource::Type.each do |t|
+      printf "  %-15s %5d\n", t.to_s + ':', world.resources[t]
+    end
   end
 
   def render_world(world)

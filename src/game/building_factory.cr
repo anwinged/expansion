@@ -63,10 +63,31 @@ module Game
       )
 
       add(
+        Building.new Building::Type::Smelter, **{
+          shortcut:     "iron",
+          construction: Construction.new(
+            ts: 120,
+            cost: ResourceBag.new({Resource::Type::Crystals => 300}),
+            requirements: [] of Game::Building::Type
+          ),
+          production: Production.new(
+            ts: 60,
+            input: ResourceBag.new({
+              Resource::Type::Crystals => 20,
+              Resource::Type::Oxygen   => 10,
+            }),
+            output: ResourceBag.new({
+              Resource::Type::Iron => 10,
+            })
+          ),
+        }
+      )
+
+      add(
         Building.new Building::Type::Terraformer, **{
           shortcut:     "terr",
           construction: Construction.new(
-            ts: 120,
+            ts: 180,
             cost: ResourceBag.new({
               Resource::Type::Crystals => 300,
             }),
@@ -77,6 +98,7 @@ module Game
             input: ResourceBag.new({
               Resource::Type::Crystals => 50,
               Resource::Type::Oxygen   => 20,
+              Resource::Type::Iron     => 5,
             }),
             output: ResourceBag.new({
               Resource::Type::Terraformation => 5,

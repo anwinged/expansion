@@ -74,6 +74,15 @@ module Game
       if !world.resources.has(mining.input)
         return mining.ts
       end
+      need_deposit = mining.deposit
+      if need_deposit
+        calc_for_deposit world, mining
+      else
+        calc_for_non_deposit world, mining
+      end
+    end
+
+    private def calc_for_deposit(world : World, mining : Mining) : TimeSpan
       resource = mining.resource
       deposit_tile = nearest_deposit(world, resource.type)
       stock_tile = nearest_stock(world)
@@ -81,8 +90,18 @@ module Game
         mined_amount = deposit_tile.dep.dec(resource.amount)
         @holded = resource.type.to_res mined_amount
         mining.ts +
-          2 * tile.point.distance(stock_tile.point) +
-          2 * tile.point.distance(deposit_tile.point)
+          2 * @point.distance(stock_tile.point) +
+          2 * @point.distance(deposit_tile.point)
+      else
+        mining.ts
+      end
+    end
+
+    private def calc_for_non_deposit(world : World, mining : Mining) : TimeSpan
+      stock_tile = nearest_stock(world)
+      if stock_tile
+        @holded = mining.resource
+        mining.ts + 2 * @point.distance(stock_tile.point)
       else
         mining.ts
       end

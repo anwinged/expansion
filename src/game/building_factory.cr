@@ -46,6 +46,23 @@ module Game
       )
 
       add(
+        Building.new Building::Type::OxygenCollector, **{
+          shortcut:     "oxygen",
+          construction: Construction.new(
+            ts: 60,
+            cost: ResourceBag.new({Resource::Type::Crystals => 200}),
+            requirements: [] of Game::Building::Type
+          ),
+          mining: Mining.new(
+            ts: 30,
+            resource: Resource.new(Resource::Type::Oxygen, 10),
+            input: ResourceBag.new({Resource::Type::Crystals => 5}),
+            deposit: false
+          ),
+        }
+      )
+
+      add(
         Building.new Building::Type::Terraformer, **{
           shortcut:     "terr",
           construction: Construction.new(
@@ -59,6 +76,7 @@ module Game
             ts: 60,
             input: ResourceBag.new({
               Resource::Type::Crystals => 50,
+              Resource::Type::Oxygen   => 20,
             }),
             output: ResourceBag.new({
               Resource::Type::Terraformation => 5,

@@ -9,12 +9,13 @@ module Game
   end
 
   class Mining
-    def initialize(@ts : TimeSpan, @resource : Resource, @input : ResourceBag)
+    def initialize(@ts : TimeSpan, @resource : Resource, @input : ResourceBag, @deposit : Bool = true)
     end
 
     getter ts
     getter resource
     getter input
+    getter deposit
   end
 
   class Construction
@@ -47,6 +48,7 @@ module Game
       StartPoint
       CrystalMiner
       CrystalRestorer
+      OxygenCollector
       Terraformer
     end
 

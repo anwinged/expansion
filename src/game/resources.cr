@@ -3,6 +3,7 @@ require "./types"
 struct Game::Resource
   enum Type
     Crystals
+    Oxygen
     Terraformation
 
     def to_res(amount : Capacity)

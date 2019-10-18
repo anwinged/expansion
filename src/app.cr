@@ -131,8 +131,9 @@ class App
   end
 
   def render_resources(world)
-    printf "Resources:\n  Crystals:       %5d\n  Terraformation: %5d\n",
+    printf "Resources:\n  Crystals:       %5d\n  Oxygen:         %5d\n  Terraformation: %5d\n",
       world.resources[Game::Resource::Type::Crystals],
+      world.resources[Game::Resource::Type::Oxygen],
       world.resources[Game::Resource::Type::Terraformation]
   end
 
